@@ -1,3 +1,4 @@
+
 // API KEYS
 // ===============================
 const apiKey = "2b234cc922a51464a58cf79b75660ac3f3e79eea2715849b5b48ea92fcb9901f";
@@ -37,3 +38,8 @@ $("#search-location").on("click", function () {
 
 // MAIN PROCESS
 // ===============================
+
+$(document).ready(function () {
+    $('.carousel').carousel();
+    $('.collapsible').collapsible();
+})
