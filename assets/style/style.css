@@ -4,3 +4,13 @@ body {
     background-image: url(../images/background2.jpg);
     background-size: cover;
 }
+
+.carousel .carousel-item {
+    width: 300px;
+    height: 300px;
+}
+
+.collapsible-body {
+    opacity: .9;
+    background-color: white;
+}
