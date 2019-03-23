@@ -14,3 +14,7 @@ body {
     opacity: .9;
     background-color: white;
 }
+
+#results-card {
+    display: none;
+}

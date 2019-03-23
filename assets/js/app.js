@@ -1,7 +1,7 @@
 // API KEYS
 // ===============================
 const apiKey = "2b234cc922a51464a58cf79b75660ac3f3e79eea2715849b5b48ea92fcb9901f";
-
+const numbers = ["one", "two", "three", "four", "five"]
 // queryURL for Giphy API
 var queryURLBase = `https://api.unsplash.com/search/photos?client_id=${apiKey}`;
 
@@ -12,13 +12,16 @@ function runQuery(queryURL) {
         method: "GET"
     }).then(function (res) {
         console.log(res);
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < numbers.length; i++) {
             var src = res.results[i].urls.small;
-            var newImage = $("<img>");
-            newImage.attr("src", src);
-            $("#image-container").append(newImage);
+            var newImage = $(`<img src="${src}">`);
+            newImage.css('height', '300px')
+            $(`#${numbers[i]}`).html(newImage);
+
         };
+        $('#results-card').css('display', 'block')
     });
+
 };
 
 runQuery(queryURLBase);
