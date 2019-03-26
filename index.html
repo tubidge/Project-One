@@ -20,18 +20,12 @@
   <body>
     <nav>
       <div class="nav-wrapper">
-        <a href="index.html" class="brand-logo" style="margin-left: 1rem;"
-          >PHAJ Around The World</a
-        >
+        <a href="index.html" class="brand-logo" style="margin-left: 1rem;">PHAJ Around The World</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li>
             <a href="favorites.html">
-              <i
-                class="material-icons"
-                style="font-size: 30px; margin-right: 1rem;"
-                >star</i
-              ></a
-            >
+              <i class="material-icons"
+                style="font-size: 30px; margin-right: 1rem;">star</i></a>
           </li>
         </ul>
       </div>
@@ -64,7 +58,7 @@
 
     <div class="row">
       <div class="col s12">
-        <div class="carousel" id="image-container">
+        <div class="carousel">
           <a class="carousel-item" href="#one!" id="one"></a>
           <a class="carousel-item" href="#two!" id="two"></a>
           <a class="carousel-item" href="#three!" id="three"></a>
@@ -98,7 +92,21 @@
               <i class="material-icons">info_outline</i>Info
             </div>
             <div class="collapsible-body">
-              <span id="info">Lorem ipsum dolor sit amet.</span>
+				<div id="info"></div>
+				<h5>Recommended Places</h5>
+				<div class="input-field">
+					<select class="icons" id="sections">
+						<option class="option" value="choose" disabled selected></option>
+						<option class="option" value="trending">Trending</option>
+						<option class="option" value="arts">Arts</option> 
+						<option class="option" value="drinks">Drinks</option>
+						<option class="option" value="food">Food</option>
+						<option class="option" value="outdoors">Outdoors</option> 
+						<option class="option" value="sights">Sights</option>
+					</select>
+					<label>Select Category</label>
+				</div>
+				<div id="places"></div>
             </div>
           </li>
         </ul>
