@@ -91,6 +91,8 @@ $(document).ready(function () {
 // MAIN PROCESS
 // ===============================
 	$('#search-location').on('click', function () {
+		$("#places").empty();
+
 		// Search parameters
 		var city = $('#city').val().trim();
 		var country = $('#country').val().trim();
@@ -99,7 +101,7 @@ $(document).ready(function () {
 
 		// Validate country input
 		if (countries.indexOf(country) === -1) {
-			alert("Sorry, that's not a country in our database :/");
+			M.toast({html: "Sorry, that's not a country in our database :/"})
 			$("#country").val("");
 			return false;
 		};
@@ -109,7 +111,7 @@ $(document).ready(function () {
 		var queryURL2 = queryURLBase2 + country;
 		runQuery2(queryURL2);
 	});
-
+	
 	// Get currently selected section
 	$(document).on("change", "#sections", function () {
 		var sel = $("#sections");
