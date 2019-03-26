@@ -5,14 +5,18 @@ $(document).ready(function () {
 	// ===============================
 	// Top 30 countries visited
 	var countries = ["france", "united states", "usa", "spain", "china", "italy", "united kingdom", "germany", "mexico", "thailand", "turkey", "austria", "malaysia", "hong kong", "greece", "russia", "japan", "canada", "saudi arabia", "poland", "south korea", "netherlands", "macao", "hungary", "united arab emirates", "india", "croatia", "ukraine", "singapore", "indonesia", "czech republic"];
+	var city;
+	var country;
+	var search;
+	var queryURL;
 
 	// API keys
-	const apiKeyUn = "2b234cc922a51464a58cf79b75660ac3f3e79eea2715849b5b48ea92fcb9901f"; // Unsplash
+	const apiKey = "2b234cc922a51464a58cf79b75660ac3f3e79eea2715849b5b48ea92fcb9901f"; // Unsplash
 	const clientID = "L3RXDSOLTBMHGMY1AUZ20JLONBYUQU5WWAD4JWLIW2JHYDXK"; // Foursquare
 	const clientIDSec = "XKRLZ531CQ0FC334PIBNNDQRER5PGCR0AQCNJRZ4EH1WSMNR"; // Foursquare
 
 	// Base URLs
-	var queryURLBase = `https://api.unsplash.com/search/photos?client_id=${apiKeyUn}`; // Unsplash
+	var queryURLBase = `https://api.unsplash.com/search/photos?client_id=${apiKey}`; // Unsplash
 	var queryURLBase2 = `https://restcountries.eu/rest/v2/name/`; // Rest Countries
 	var queryURLBase3 = `https://api.foursquare.com/v2/venues/explore?client_id=${clientID}&client_secret=${clientIDSec}&v=20180323&limit=5`
 
@@ -25,7 +29,7 @@ $(document).ready(function () {
 			method: "GET"
 		}).then(function (res) {
 			console.log(`Images: ${queryURL}`);
-			// Array to add id each image
+			// Array to add id to each image
 			const numbers = ["one", "two", "three", "four", "five"];
 			
 			for (var i = 0; i < numbers.length; i++) {
@@ -92,13 +96,13 @@ $(document).ready(function () {
 // ===============================
 	$('#search-location').on('click', function () {
 		$("#places").empty();
-
+		
 		// Search parameters
-		var city = $('#city').val().trim();
-		var country = $('#country').val().trim();
-		var search = `${city},${country}`;
-		var queryURL = `${queryURLBase}&query=${search}`;
-
+		city = $('#city').val().trim();
+		country = $('#country').val().trim();
+		search = `${city},${country}`;
+		queryURL = `${queryURLBase}&query=${search}`;
+		
 		// Validate country input
 		if (countries.indexOf(country) === -1) {
 			M.toast({html: "Sorry, that's not a country in our database :/"})
@@ -111,8 +115,8 @@ $(document).ready(function () {
 		var queryURL2 = queryURLBase2 + country;
 		runQuery2(queryURL2);
 	});
-	
-	// Get currently selected section
+		
+	// Get selected section
 	$(document).on("change", "#sections", function () {
 		var sel = $("#sections");
 		var opt = sel[0].options;
@@ -122,11 +126,11 @@ $(document).ready(function () {
 			selected = opt[i].value;
 			if (opt[i].selected === true) {
 					var currentSection = opt[i].value;
-					// Render places
-					var city = $('#city').val().trim();
-					var country = $('#country').val().trim();
-					var search = `${city},${country}`;
-					var queryURL = `${queryURLBase}&query=${search}`;
+					// Render list of places
+					city = $('#city').val().trim();
+					country = $('#country').val().trim();
+					search = `${city},${country}`;
+					queryURL = `${queryURLBase}&query=${search}`;
 					var section = currentSection;
 					var queryURL3 = queryURLBase3 + "&near=" + search + "&section=" + section;
 					runQuery3(queryURL3);
