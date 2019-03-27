@@ -21,6 +21,8 @@ $(document).ready(function () {
 	var park;
 	var search;
 	var queryURL;
+	var page = 1;
+	var goodImages = [];
 
 	// API keys
 	const imageKey = '2b234cc922a51464a58cf79b75660ac3f3e79eea2715849b5b48ea92fcb9901f'; // Unsplash
@@ -32,7 +34,7 @@ $(document).ready(function () {
 	const queryURLBaseImages = `https://api.unsplash.com/search/photos?client_id=${imageKey}`; // Unsplash
 	const queryURLBasePlaces = `https://api.foursquare.com/v2/venues/explore?client_id=${clientID}&client_secret=${clientIDSec}&v=20180323&limit=5`; // Foursquare
 	const queryURLBaseParks = `https://developer.nps.gov/api/v1/parks?api_key=${parksKey}`; // National parks
-
+				
 	// FUNCTIONS
 	// ===============================
 	// Render images
@@ -50,7 +52,32 @@ $(document).ready(function () {
 				var src = res.results[i].urls.small;
 				var newImage = $(`<img src="${src}">`);
 				$(`#${numbers[i]}`).html(newImage);
+				
+				var tags = res.results[i].tags;
+				console.log(tags);
+				
+				for (var j = 0; j < tags.length; j++) {
+					var tag = tags[j].title;
+					var newTag = tag.toLowerCase();
+					if (newTag === "new york" || newTag === "new york") {
+						console.log("good match");
+						goodImages.push(src);
+						console.log(goodImages);
+						if (goodImages.length === 3) {
+							console.log("found 3 good images");
+						};
+					} /*else {
+						page++;
+						// Search parameters
+						city = $('#city').val().trim();
+						state = $('#state').val().trim();
+						search = (`${city}%20${state}`);
+						queryURL = `${queryURLBaseImages}&query=${search}&page=${page}`;
+						runQueryImages(queryURL);
+					}*/
+				}
 			};
+			
 			$('#results-card').show();
 		});
 	};
@@ -67,7 +94,8 @@ $(document).ready(function () {
 			for (var i = 0; i < venues.length; i++) {
 				var name = venues[i].venue.name;
 				var venueID = venues[i].venue.id;
-				var category = venues[i].venue.categories[0].name;
+				var category = venues[i].venue.categories[0].name;			
+				console.log(venueID);
 				var newPlace = $('<p>');
 				var newPlaceLink = $('<a>');
 				newPlaceLink.addClass('place');
@@ -127,8 +155,8 @@ $(document).ready(function () {
 		// Search parameters
 		city = $('#city').val().trim();
 		state = $('#state').val().trim();
-		search = (`${city},${state}`);
-		queryURL = `${queryURLBaseImages}&query=${search}`;
+		search = (`${city}%20${state}`);
+		queryURL = `${queryURLBaseImages}&query=${search}&page=${page}`;
 		
 		runQueryImages(queryURL);
 	});
@@ -145,7 +173,7 @@ $(document).ready(function () {
 		$('#park-info').show();
 		park = $("#parks").val().trim();
 		var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
-		var parkImageURL = `${queryURLBaseImages}&query=${park}`;
+		var parkImageURL = `${queryURLBaseImages}&query=${park} national park`;
 		runQueryParks(parkInfoURL);
 		runQueryImages(parkImageURL);
 		$('#parks').val('');
