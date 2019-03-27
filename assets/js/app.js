@@ -1,5 +1,15 @@
 $(document).ready(function () {
 	M.AutoInit();
+	
+	$('.slider').slider({
+		interval: 2800,
+		duration: 700,
+		indicators: false,
+	});
+	
+	$(".carousel").hide();
+	$("#results-card").hide();
+	$("#display-places").hide();
 
 	// SETUP VARIABLES
 	// ===============================
@@ -37,8 +47,9 @@ $(document).ready(function () {
 				var newImage = $(`<img src="${src}">`);
 				$(`#${numbers[i]}`).html(newImage);
 			};
+			
+			$("#results-card").show();
 
-			$('#results-card').css('display', 'block')
 		});
 	};
 
@@ -49,7 +60,7 @@ $(document).ready(function () {
 			method: "GET"
 		}).then(function (res) {
 			console.log(`Places: ${queryURL}`);
-			$("#display-places").css("display", "block");
+			$("#display-places").show();
 			var venues = res.response.groups[0].items;
 			for (var i = 0; i < venues.length; i++) {
 				var name = venues[i].venue.name;
@@ -76,7 +87,6 @@ $(document).ready(function () {
 			method: "GET",
 		}).then(function (res) {
 			console.log(res);
-			$('#results-card').css('display', 'block')
 			var results = res.data;
 			var length = results.length
 			for (var i = 0; i < length; i++) {
@@ -85,19 +95,26 @@ $(document).ready(function () {
 				if (currentResult.name.toLowerCase() === park || currentResult.fullName.toLowerCase() === park) {
 					var description = $('<p>').text(currentResult.description);
 					var directions = $('<p>').text(currentResult.directionsInfo)
-					console.log(description);
-					console.log(directions);
-					$("#weather").append(currentResult.weatherInfo);
+					$('#weather').append(currentResult.weatherInfo);
 					$('#info').append(description).append(directions);
 				}
 			};
 		});
 	};
 
+	$(".start-btn").on("click", function () {
+		$(".card").css("display", "block");
+		$(".slider").empty();
+	});
+	
 	// MAIN PROCESS
 	// ===============================
 	$('#search-cities').on('click', function () {
+		$(".carousel").show();
+		$("#weather").empty();
+		$("#info").empty();
 		$("#places").empty();
+		$("#display-places").show();
 		// Search parameters
 		city = $('#city').val().trim();
 		state = $('#state').val().trim();
@@ -108,12 +125,16 @@ $(document).ready(function () {
 	});
 
 	$('#search-parks').on('click', function () {
-		$("#display-places").css("display", "none");
+		$(".carousel").show();
+		$("#places").empty();
+		$("#display-places").hide();
+		$("#info").show();
 		park = $("#parks").val().trim();
 		var parkInfoURL = `${queryURLBase3}&q=${park}`;
 		var parkImageURL = `${queryURLBase}&query=${park}`;
 		runQuery3(parkInfoURL);
 		runQuery(parkImageURL);
+		$("#parks").val('');
 	});
 
 	// Get selected section
@@ -127,17 +148,16 @@ $(document).ready(function () {
 			if (opt[i].selected === true) {
 				var currentSection = opt[i].value;
 				// Render list of places
-				city = $('#city').val().trim();
-				state = $('#state').val().trim();
-				search = (`${city},${state}`);
-				queryURL = `${queryURLBase}&query=${search}`;
+				var city = $('#city').val().trim();
+				var state = $('#state').val().trim();
+				var search = (`${city},${state}`);
 				var section = currentSection;
 				var queryURL2 = queryURLBase2 + "&near=" + search + "&section=" + section;
 				runQuery2(queryURL2);
 			};
 		};
 	});
-
+	
 	$('#cities-start').click(function () {
 		$('#start-buttons').addClass('hide');
 		$('#city-search').removeClass('hide');
@@ -159,5 +179,11 @@ $(document).ready(function () {
 		$('#parks-search').addClass('hide');
 		$('#city-search').addClass('hide');
 		$('#back-button').addClass('hide');
+		$(".carousel").hide();
+		$("#results-card").hide();
+		$("#info").empty();
+		$("#weather").empty();
+		$('#city').val('');
+		$('#state').val('');
 	});
 });

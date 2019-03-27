@@ -13,6 +13,41 @@
 </head>
 
 <body>
+
+<!-- Slider -->
+<div class="slider fullscreen">
+    <ul class="slides">
+      <li>
+        <img src="assets/images/nyc.jpg"> <!-- random image -->
+        <div class="caption center-align">
+          <h3>Your destination awaits...</h3>
+		  <a class="waves-effect waves-light btn-large blue darken-3 start-btn"><i class="material-icons left">search</i>Begin Your Search</a>
+        </div>
+      </li>
+      <li>
+        <img src="assets/images/arches.jpg"> <!-- random image -->
+        <div class="caption right-align">
+          <h3>Arches National Park</h3>
+		  <a class="waves-effect waves-light btn-large pink darken-4 start-btn"><i class="material-icons left">search</i>Begin Your Search</a>
+        </div>
+      </li>
+      <li>
+        <img src="assets/images/dc.jpg"> <!-- random image -->
+        <div class="caption right-left">
+          <h3>Washington D.C.</h3>
+		  <a class="waves-effect waves-light btn-large indigo darken-4 start-btn"><i class="material-icons left">search</i>Begin Your Search</a>
+        </div>
+      </li>
+      <li>
+        <img src="assets/images/bridge.jpg"> <!-- random image -->
+        <div class="caption right-align">
+          <h3>San Francisco</h3>
+		  <a class="waves-effect waves-light btn-large orange accent-4 start-btn"><i class="material-icons left">search</i>Begin Your Search</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
   <nav>
     <div class="nav-wrapper blue-grey lighten-5">
       <a href="index.html" class="brand-logo blue-grey-text text-darken-3" style="margin-left: 1rem;">PHAJ Around
@@ -36,13 +71,14 @@
       <p>A bunch of text</p>
     </div>
   </div>
-
+  
+  <!-- Search cities card -->
   <div class="row">
     <div class="col s12 offset-m2" style="margin-top: 3rem;" id="start-buttons">
       <div class="col s4">
         <div class="card">
           <div class="card-image">
-            <img src="assets/images/sanfran" style="height: 250px;">
+            <img src="assets/images/sanfran.jpg">
             <span class="card-title">Cities</span>
             <a class="btn-floating halfway-fab waves-effect waves-light deep-purple darken-4" id="cities-start"><i
                 class="material-icons">search</i></a>
@@ -58,10 +94,11 @@
           </div>
         </div>
       </div>
+	  <!-- Search parks card -->
       <div class="col s4">
         <div class="card">
           <div class="card-image">
-            <img src="assets/images/natpark.jpeg" style="height: 250px;">
+            <img src="assets/images/natpark.jpg">
             <span class="card-title">National Parks</span>
             <a class="btn-floating halfway-fab waves-effect waves-light orange accent-4" id="parks-start"><i
                 class="material-icons">search</i></a>
@@ -101,73 +138,75 @@
   </div>
 
   <!-- Search parks -->
-  <div class="row">
-    <form class="col s12 hide" id="parks-search">
-      <div class="row">
-        <div class="input-field col s3">
-          <input id="parks" type="text" class="grey-text text-lighten-1" />
-          <label for="parks">Parks</label>
-        </div>
-        <div class="col s3">
-          <a class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
-            style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
-        </div>
-      </div>
-    </form>
-  </div>
+	  <div class="row">
+		<form class="col s12 hide" id="parks-search">
+		  <div class="row">
+			<div class="input-field col s3">
+			  <input id="parks" type="text" class="grey-text text-lighten-1" />
+			  <label for="parks">Parks</label>
+			</div>
+			<div class="col s3">
+			  <a class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
+				style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
+			</div>
+		  </div>
+		</form>
+	  </div>
 
-  <div class="row">
-    <div class="col s12">
-      <div class="carousel">
-        <a class="carousel-item" href="#one!" id="one"></a>
-        <a class="carousel-item" href="#two!" id="two"></a>
-        <a class="carousel-item" href="#three!" id="three"></a>
-        <a class="carousel-item" href="#four!" id="four"></a>
-        <a class="carousel-item" href="#five!" id="five"></a>
-      </div>
-    </div>
-  </div>
+  <!-- Carousel -->
+		<div class="row">
+			<div class="col s12">
+				<div class="carousel">
+					<a class="carousel-item" href="#one!" id="one"></a>
+					<a class="carousel-item" href="#two!" id="two"></a>
+					<a class="carousel-item" href="#three!" id="three"></a>
+					<a class="carousel-item" href="#four!" id="four"></a>
+					<a class="carousel-item" href="#five!" id="five"></a>
+				</div>
+			</div>
+		</div>
 
-  <div class="row">
-    <div class="col s6 offset-m3">
-      <ul class="collapsible popout z-depth-5" id="results-card">
-        <li>
-          <div class="collapsible-header z-depth-3">
-            <i class="material-icons">filter_drama</i>Weather
-          </div>
-          <div class="collapsible-body" id="weather">
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header z-depth-3">
-            <i class="material-icons">place</i>Map
-          </div>
-          <div class="collapsible-body" id="maps">
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header z-depth-3">
-            <i class="material-icons">info_outline</i>Info
-          </div>
-          <div class="collapsible-body" id="info">
-            <div id="display-places">
-              <h5>Recommended Places</h5>
-              <label>Select Category</label>
-              <select class="icons" id="sections">
-                <option class="option"></option>
-                <option class="option" value="trending">Trending</option>
-                <option class="option" value="arts">Arts</option>
-                <option class="option" value="drinks">Drinks</option>
-                <option class="option" value="food">Food</option>
-                <option class="option" value="outdoors">Outdoors</option>
-                <option class="option" value="sights">Sights</option>
-              </select>
-              <div id="places"></div>
-            </div>
-        </li>
-      </ul>
-    </div>
-  </div>
+		<div class="row">
+			<div class="col s6 offset-m3">
+				<ul class="collapsible popout z-depth-5" id="results-card">
+					<li>
+						<div class="collapsible-header z-depth-3">
+							<i class="material-icons">filter_drama</i>Weather
+						</div>
+						<div class="collapsible-body" id="weather">
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header z-depth-3">
+							<i class="material-icons">place</i>Map
+						</div>
+						<div class="collapsible-body" id="maps">
+						</div>
+					</li>
+					<li>
+						<div class="collapsible-header z-depth-3">
+							<i class="material-icons">info_outline</i>Info
+						</div>
+						<div class="collapsible-body">
+							<div id="info"></div>
+							<div id="display-places">
+								<h5>Recommended Places</h5>
+								<select class="icons" id="sections">
+								<option class="option">Select a category</option>
+								<option class="option" value="trending">Trending</option>
+								<option class="option" value="arts">Arts</option>
+								<option class="option" value="drinks">Drinks</option>
+								<option class="option" value="food">Food</option>
+								<option class="option" value="outdoors">Outdoors</option>
+								<option class="option" value="sights">Sights</option>
+								</select>
+								<div id="places"></div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>

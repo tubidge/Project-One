@@ -1,8 +1,12 @@
 /* MAIN */
 
-body {
-    background-image: url(../images/background2.jpg);
+html {
+    background: url(../images/background.jpg) no-repeat center;
     background-size: cover;
+}
+
+#main-content {
+	display: none;
 }
 
 .carousel .carousel-item {
@@ -14,6 +18,8 @@ body {
     background-color: white;
 }
 
-#results-card {
-    display: none;
+/* HIDE ELEMENTS */
+
+.card {
+	display: none;
 }
