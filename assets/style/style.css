@@ -1,25 +1,26 @@
-/* MAIN */
-
+/* Background image */
 html {
-    background: url(../images/background.jpg) no-repeat center;
+    background: url(../images/background.jpg);
     background-size: cover;
 }
 
+/* Hidden elements */
 #main-content {
 	display: none;
 }
 
+.card {
+	display: none;
+}
+
+/* Carousel images */
 .carousel .carousel-item {
     width: 300px;
 }
 
+/* Results card */
 .collapsible-body {
     opacity: .9;
     background-color: white;
 }
 
-/* HIDE ELEMENTS */
-
-.card {
-	display: none;
-}
