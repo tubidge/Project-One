@@ -114,15 +114,15 @@ $(document).ready(function () {
 	
 	$('#search-cities').on('click', function () {
 		// Display images
-		$(".carousel").show();
+		$('.carousel').show();
 		
 		// Empty information from previous searches
-		$("#weather").empty();
-		$("#park-info").empty();
-		$("#places").empty();
+		$('#weather').empty();
+		$('#park-info').empty();
+		$('#places').empty();
 		
 		// Display list of places
-		$("#display-places").show();
+		$('#display-places').show();
 		
 		// Search parameters
 		city = $('#city').val().trim();
@@ -134,26 +134,29 @@ $(document).ready(function () {
 	});
 
 	$('#search-parks').on('click', function () {
-		$(".carousel").show();
-		$("#places").empty();
+		// Display images
+		$('.carousel').show();
+		
+		// Empty information from previous searches
+		$('#places').empty();
 		
 		// Hide list of places
-		$("#display-places").hide();
-		$("#park-info").show();
+		$('#display-places').hide();
+		$('#park-info').show();
 		park = $("#parks").val().trim();
 		var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
 		var parkImageURL = `${queryURLBaseImages}&query=${park}`;
 		runQueryParks(parkInfoURL);
 		runQueryImages(parkImageURL);
-		$("#parks").val('');
+		$('#parks').val('');
 	});
 
 	// Get selected section
-	$(document).on("change", "#sections", function () {
-		var sel = $("#sections");
+	$(document).on('change', '#sections', function () {
+		var sel = $('#sections');
 		var opt = sel[0].options;
 		var length = opt.length;
-		$("#places").empty();
+		$('#places').empty();
 		for (var i = 0; i < length; i++) {
 			selected = opt[i].value;
 			if (opt[i].selected === true) {
@@ -163,7 +166,7 @@ $(document).ready(function () {
 				var state = $('#state').val().trim();
 				var search = (`${city},${state}`);
 				var section = currentSection;
-				var queryURLSelected = queryURLBasePlaces + "&near=" + search + "&section=" + section;
+				var queryURLSelected = queryURLBasePlaces + '&near=' + search + '&section=' + section;
 				runQueryPlaces(queryURLSelected);
 			};
 		};
@@ -185,15 +188,16 @@ $(document).ready(function () {
 		$('#back-button').removeClass('hide')
 	});
 
+	// Clear everything when back button clicked
 	$(document).on('click', '#back-button', function () {
 		$('#start-buttons').removeClass('hide');
 		$('#parks-search').addClass('hide');
 		$('#city-search').addClass('hide');
 		$('#back-button').addClass('hide');
-		$(".carousel").hide();
-		$("#results-card").hide();
-		$("#park-info").empty();
-		$("#weather").empty();
+		$('.carousel').hide();
+		$('#results-card').hide();
+		$('#park-info').empty();
+		$('#weather').empty();
 		$('#city').val('');
 		$('#state').val('');
 	});
