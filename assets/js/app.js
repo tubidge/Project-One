@@ -11,58 +11,58 @@ $(document).ready(function () {
 	
 	$('input.autocomplete').autocomplete({
 		data: {
-			"AL": null,
-			"AK": null,
-			"AZ": null,
-			"AR": null,
-			"CA": null,
-			"CO": null,
-			"CT": null,
-			"DE": null,
-			"FL": null,
-			"GA": null,
-			"HI": null,
-			"ID": null,
-			"IL": null,
-			"IN": null,
-			"IA": null,
-			"KS": null,
-			"KY": null,
-			"LA": null,
-			"ME": null,
-			"MD": null,
-			"MA": null,
-			"MI": null,
-			"MN": null,
-			"MS": null,
-			"MO": null,
-			"MT": null,
-			"NE": null,
-			"NV": null,
-			"NH": null,
-			"NJ": null,
-			"NM": null,
-			"NY": null,
-			"NC": null,
-			"ND": null,
-			"OH": null,
-			"OK": null,
-			"OR": null,
-			"PA": null,
-			"RI": null,
-			"SC": null,
-			"SD": null,
-			"TN": null,
-			"TX": null,
-			"UT": null,
-			"VT": null,
-			"VA": null,
-			"WA": null,
-			"WV": null,
-			"WI": null,
-			"WY": null,
-			"DC": null,
-			"PR": null,
+		"AL": null,
+		"AK": null,
+		"AZ": null,
+		"AR": null,
+		"CA": null,
+		"CO": null,
+		"CT": null,
+		"DE": null,
+		"FL": null,
+		"GA": null,
+		"HI": null,
+		"ID": null,
+		"IL": null,
+		"IN": null,
+		"IA": null,
+		"KS": null,
+		"KY": null,
+		"LA": null,
+		"ME": null,
+		"MD": null,
+		"MA": null,
+		"MI": null,
+		"MN": null,
+		"MS": null,
+		"MO": null,
+		"MT": null,
+		"NE": null,
+		"NV": null,
+		"NH": null,
+		"NJ": null,
+		"NM": null,
+		"NY": null,
+		"NC": null,
+		"ND": null,
+		"OH": null,
+		"OK": null,
+		"OR": null,
+		"PA": null,
+		"RI": null,
+		"SC": null,
+		"SD": null,
+		"TN": null,
+		"TX": null,
+		"UT": null,
+		"VT": null,
+		"VA": null,
+		"WA": null,
+		"WV": null,
+		"WI": null,
+		"WY": null,
+		"DC": null,
+		"PR": null,
 		},
 	});
 
@@ -80,7 +80,60 @@ $(document).ready(function () {
 	var queryURL;
 	
 	// Data Validation
-	var states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC", "PR"]
+	var states = [
+	"AL",
+	"AK",
+	"AZ",
+	"AR",
+	"CA",
+	"CO",
+	"CT",
+	"DE",
+	"FL",
+	"GA",
+	"HI",
+	"ID",
+	"IL",
+	"IN",
+	"IA",
+	"KS",
+	"KY",
+	"LA",
+	"ME",
+	"MD",
+	"MA",
+	"MI",
+	"MN",
+	"MS",
+	"MO",
+	"MT",
+	"NE",
+	"NV",
+	"NH",
+	"NJ",
+	"NM",
+	"NY",
+	"NC",
+	"ND",
+	"OH",
+	"OK",
+	"OR",
+	"PA",
+	"RI",
+	"SC",
+	"SD",
+	"TN",
+	"TX",
+	"UT",
+	"VT",
+	"VA",
+	"WA",
+	"WV",
+	"WI",
+	"WY",
+	"DC",
+	"PR",
+	];
 
 	// API keys
 	const imageKey = '2b234cc922a51464a58cf79b75660ac3f3e79eea2715849b5b48ea92fcb9901f'; // Unsplash
@@ -89,7 +142,7 @@ $(document).ready(function () {
 	const parksKey = 'ijY3T1c8GJfW6s8gD4MAUVZYbfM7hnEnGNoxpOet'; // National parks
 
 	// Base URLs
-	const queryURLBaseImages = `https://api.unsplash.com/search/photos?client_id=${imageKey}&page=1&per_page=30&orientation=landscape`; // Unsplash
+	const queryURLBaseImages = `https://api.unsplash.com/search/photos?client_id=${imageKey}&orientation=landscape&per_page=30`; // Unsplash
 	const queryURLBasePlaces = `https://api.foursquare.com/v2/venues/explore?client_id=${clientID}&client_secret=${clientIDSec}&v=20180323`; // Foursquare
 	const queryURLBaseParks = `https://developer.nps.gov/api/v1/parks?api_key=${parksKey}`; // National parks
 
@@ -105,7 +158,8 @@ $(document).ready(function () {
 			// Array to add id to each image
 			const numbers = ['one', 'two', 'three'];
 			var images = [];
-			var goodImages = [];
+			city = $('#city').val().trim();  
+			state = $('#state').val().trim();
 			
 			for (var i = 0; i < res.results.length; i++) {
 				var src = res.results[i].urls.small;
@@ -113,29 +167,33 @@ $(document).ready(function () {
 				var tags = res.results[i].tags; 
 				var photoTags = res.results[i].photo_tags;
 				
-				if (likes > 0) {
-					for (var j = 0; j < tags.length; j++) { 
-						var tag = tags[j].title; 
-						
-						city = $('#city').val().trim();  
-						state = $('#state').val().trim();
-						
-						if (tag === city || tag === "city" || tag === "mountains" || tag === "beach" || tag === "snow" || tag === "cityscape" || tag === "skyline" || tag === "landscape" || tag === "ocean" || tag === "lights" || tag === "downtown" || tag === "building" || tag === "theme park" || tag === "sunset" || tag === "architecture" || tag == "state") {
-							if (images.indexOf(src) === -1) {	
-									images.push(src);
-								}
+				if (images.length < numbers.length) {
+					if (likes > 0) {
+						for (var j = 0; j < tags.length; j++) { 
+							var tag = tags[j].title; 
+							
+							if (tag === city || tag === "usa" || tag === "resort" || tag === "nature" || tag === "city" || tag === "mountains" || tag === "beach" || tag === "snow" || tag === "cityscape" || tag === "skyline" || tag === "landscape" || tag === "downtown" || tag === "theme park" || tag === "park") {
+								if (images.indexOf(src) === -1) {	
+										images.push(src);
+									}
+								};
 							};
-						};
-					for (var k = 0; k < photoTags.length; k++) { 
-						var photoTag = photoTags[k].title; 
-						
-						if (photoTag === "person" || photoTag === "human" || photoTag === "street sign" || photoTag === "traffic") {
-							var index = images.indexOf(src);
-							images.splice(index, 1);
+						for (var k = 0; k < photoTags.length; k++) { 
+							var photoTag = photoTags[k].title; 
+							
+							if (photoTag === "person" || photoTag === "man" || photoTag === "woman" || photoTag === "face" || photoTag === "old" || photoTag === "human" || photoTag === "sign" || photoTag === "traffic" || photoTag === "animal") {
+								var index = images.indexOf(src);
+								images.splice(index, 1);
+							};
 						};
 					};
 				};
 			};
+			
+			if(images.length < numbers.length) {
+				console.log("not enough images");		
+			};
+			
 			for (var i = 0; i < numbers.length; i++) {
 				var newImage = $(`<img src="${images[i]}">`);
 				$(`#${numbers[i]}`).html(newImage);
@@ -235,8 +293,9 @@ $(document).ready(function () {
 		} else {
 			// Display images
 			$('.carousel').show();
-			search = (`${city}%20${state}`);
+			search = `${city}%20${state}`;
 			queryURL = `${queryURLBaseImages}&query=${search}`;
+			
 			runQueryImages(queryURL);
 		};
 	});
