@@ -1,14 +1,24 @@
-/* MAIN */
-
-body {
-    background-image: url(../images/background2.jpg);
+/* Background image */
+html {
+    background: url(../images/background.jpg);
     background-size: cover;
 }
 
+/* Hidden elements */
+#main-content {
+    display: none;
+}
+
+.card {
+    display: none;
+}
+
+/* Carousel images */
 .carousel .carousel-item {
     width: 300px;
 }
 
+/* Results card */
 .collapsible-body {
     opacity: .9;
     background-color: white;
