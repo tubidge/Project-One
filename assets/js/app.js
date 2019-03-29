@@ -74,6 +74,9 @@ $(document).ready(function () {
     var park;
     var search;
     var queryURL;
+    var key = "fe8bb39cf6f11fec454d5ca72722773e";
+    var forecastApiResponse = {};
+    var windDirection = "";
     var parkResults = true;
     const numbers = ['one', 'two', 'three'];
     // Data Validation
@@ -125,7 +128,7 @@ $(document).ready(function () {
                     if (likes > 0) {
                         for (var j = 0; j < tags.length; j++) {
                             var tag = tags[j].title;
-                            if (tag === city || tag === "usa" || tag === "resort" || tag === "nature" || tag === "city" || tag === "mountains" || tag === "beach" || tag === "snow" || tag === "cityscape" || tag === "skyline" || tag === "landscape" || tag === "downtown" || tag === "theme park" || tag === "park") {
+                            if (tag === city || tag === "usa" || tag === "resort" || tag === "nature" || tag === "city" || tag === "mountains" || tag === "snow" || tag === "cityscape" || tag === "skyline" || tag === "landscape" || tag === "downtown" || tag === "theme park" || tag === "park") {
                                 if (images.indexOf(src) === -1) {
                                     images.push(src);
                                 };
@@ -133,7 +136,7 @@ $(document).ready(function () {
                         };
                         for (var k = 0; k < photoTags.length; k++) {
                             var photoTag = photoTags[k].title;
-                            if (photoTag === "person" || photoTag === "man" || photoTag === "woman" || photoTag === "face" || photoTag === "old" || photoTag === "human" || photoTag === "sign" || photoTag === "traffic" || photoTag === "animal") {
+                            if (photoTag === "person" || photoTag === "man" || photoTag === "bird" || photoTag === "woman" || photoTag === "face" || photoTag === "old" || photoTag === "human" || photoTag === "sign" || photoTag === "traffic" || photoTag === "animal") {
                                 var index = images.indexOf(src);
                                 images.splice(index, 1);
                             };
@@ -222,6 +225,146 @@ $(document).ready(function () {
             };
         });
     };
+
+    // START OF WEATHER API FUNCTIONS
+    // Function to make current weather API call, then display current weather.
+    function currentWeatherCall() {
+        var queryURL =
+            `https://api.openweathermap.org/data/2.5/weather?q=${city},usa&units=imperial&appid=${key}`;
+        var encodeURL = encodeURI(queryURL);
+        console.log(encodeURL);
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+            // Create a table to hold weather data on page.
+            var table = $("#weather");
+            // Adding temperature to page.
+            var currentTemp = $("<tr>").text(`Current Temperature: ${response.main.temp} F`);
+            table.append(currentTemp);
+            // Adding wind speed to page.
+            var windSpeed = $("<tr>").text(`Wind Speed: ${response.wind.speed} mph`);
+            table.append(windSpeed);
+            // Calling function to calculate wind direction.
+            calcWindDir(response.wind.deg);
+            // Adding wind direction to page.
+            var windDir = $("<tr>").text(`Wind Direction: ${windDirection}`);
+            table.append(windDir);
+            // Adding humidity to page.
+            var humid = $("<tr>").text(`Humidity: ${response.main.humidity}%`);
+            table.append(humid);
+        });
+    };
+
+    // Function to make weather forecast API call, then display forecast.
+    function forecastCall() {
+        var queryURL =
+            `https://api.openweathermap.org/data/2.5/forecast?q=${city},usa&units=imperial&appid=${key}`;
+        var encodeURL = encodeURI(queryURL);
+        console.log(encodeURL)
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function (response) {
+            forecastApiResponse = response;
+            console.log(`Forecast Response: ${forecastApiResponse}`);
+            var day1 = forecastApiResponse.list[5];
+            var day2 = forecastApiResponse.list[13];
+            var day3 = forecastApiResponse.list[21];
+            var day4 = forecastApiResponse.list[29];
+            var day5 = forecastApiResponse.list[37];
+
+            $("#row1").html("<th> 5 Day Forecast </th>");
+
+            var row2 = $("#row2");
+            var day1Date = $("<th>").text(moment.unix(day1.dt).format("MMM Do YYYY"));
+            var day2Date = $("<th>").text(moment.unix(day2.dt).format("MMM Do YYYY"));
+            var day4Date = $("<th>").text(moment.unix(day4.dt).format("MMM Do YYYY"));
+            var day3Date = $("<th>").text(moment.unix(day3.dt).format("MMM Do YYYY"));
+            var day5Date = $("<th>").text(moment.unix(day5.dt).format("MMM Do YYYY"));
+            row2.append(day1Date);
+            row2.append(day2Date);
+            row2.append(day3Date);
+            row2.append(day4Date);
+            row2.append(day5Date);
+
+            var row3 = $("#row3");
+            var day1Temp = $("<td>").text(`Temperature: ${day1.main.temp}`)
+            var day2Temp = $("<td>").text(`Temperature: ${day2.main.temp}`);
+            var day3Temp = $("<td>").text(`Temperature: ${day3.main.temp}`);
+            var day4Temp = $("<td>").text(`Temperature: ${day4.main.temp}`);
+            var day5Temp = $("<td>").text(`Temperature: ${day5.main.temp}`);
+            row3.append(day1Temp);
+            row3.append(day2Temp);
+            row3.append(day3Temp);
+            row3.append(day4Temp);
+            row3.append(day5Temp);
+
+            var row4 = $("#row4");
+            var day1WindSpeed = $("<td>").text(`Wind Speed: ${day1.wind.speed} mph`);
+            var day2WindSpeed = $("<td>").text(`Wind Speed: ${day2.wind.speed} mph`);
+            var day3WindSpeed = $("<td>").text(`Wind Speed: ${day3.wind.speed} mph`);
+            var day4WindSpeed = $("<td>").text(`Wind Speed: ${day4.wind.speed} mph`);
+            var day5WindSpeed = $("<td>").text(`Wind Speed: ${day5.wind.speed} mph`);
+            row4.append(day1WindSpeed);
+            row4.append(day2WindSpeed);
+            row4.append(day3WindSpeed);
+            row4.append(day4WindSpeed);
+            row4.append(day5WindSpeed);
+
+            var row5 = $("#row5");
+            calcWindDir(day1.wind.deg);
+            var day1WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+            calcWindDir(day2.wind.deg);
+            var day2WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+            calcWindDir(day3.wind.deg);
+            var day3WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+            calcWindDir(day4.wind.deg);
+            var day4WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+            calcWindDir(day5.wind.deg);
+            var day5WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+            row5.append(day1WindDir);
+            row5.append(day2WindDir);
+            row5.append(day3WindDir);
+            row5.append(day4WindDir);
+            row5.append(day5WindDir);
+
+            var row6 = $("#row6");
+            var day1Humidity = $("<td>").text(`Humidity: ${day1.main.humidity}%`);
+            var day2Humidity = $("<td>").text(`Humidity: ${day2.main.humidity}%`);
+            var day3Humidity = $("<td>").text(`Humidity: ${day3.main.humidity}%`);
+            var day4Humidity = $("<td>").text(`Humidity: ${day4.main.humidity}%`);
+            var day5Humidity = $("<td>").text(`Humidity: ${day5.main.humidity}%`);
+            row6.append(day1Humidity);
+            row6.append(day2Humidity);
+            row6.append(day3Humidity);
+            row6.append(day4Humidity);
+            row6.append(day5Humidity);
+        });
+    };
+
+    // Function to calculate wind direction.
+    function calcWindDir(deg) {
+        // var deg = weatherApiResponse.wind.deg;
+        if (deg <= 22.5 || deg >= 337.501) {
+            windDirection = "N";
+        } else if (deg >= 22.501 && deg <= 67.5) {
+            windDirection = "NE";
+        } else if (deg >= 67.501 && deg <= 112.5) {
+            windDirection = "E";
+        } else if (deg >= 112.501 && deg <= 157.5) {
+            windDirection = "SE";
+        } else if (deg >= 157.501 && deg <= 202.5) {
+            windDirection = "S";
+        } else if (deg >= 202.501 && deg <= 247.5) {
+            windDirection = "SW";
+        } else if (deg >= 247.501 && deg <= 292.5) {
+            windDirection = "W";
+        } else {
+            windDirection = "NW";
+        };
+    };
+
     // MAIN PROCESS
     // ===============================
     // Display city and park search options and hide slider
@@ -234,12 +377,13 @@ $(document).ready(function () {
     $('#search-cities').on('click', function () {
         // Empty information from previous searches
         $('#weather').empty();
+        $('#row1, #row2, #row3, #row4, #row5, #row6').empty();
         $('#park-info').empty();
         $('#places').empty();
         // Display list of places
         $('#display-places').show();
         // Search parameters        
-        var city = $('#city').val().trim();
+        city = $('#city').val().trim();
         city = city.replace(/ /g, "%20");
         state = $('#state').val().trim();
         state = state.toUpperCase();
@@ -253,6 +397,8 @@ $(document).ready(function () {
             search = `${city}%20${state}`;
             queryURL = `${queryURLBaseImages}&query=${search}&page=1&per_page=30`;
             runQueryImages(queryURL);
+            currentWeatherCall();
+            forecastCall();
         };
     });
     // Search national parks
@@ -311,5 +457,16 @@ $(document).ready(function () {
         $('#weather').empty();
         $('#city').val('');
         $('#state').val('');
+    });
+
+    // Function to capture input, reset form, then call API function.
+    $("#submit").on("click", function (event) {
+        city = $("#city").val().trim();
+        $("#input-form").each(function () {
+            this.reset();
+        });
+        console.log(country, city);
+        currentWeatherCall();
+        forecastCall();
     });
 });
