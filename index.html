@@ -1,287 +1,245 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="assets/style/style.css" />
-    <title>Document</title>
-  </head>
 
-  <body>
-    <!-- Slider -->
-    <div class="slider fullscreen">
-      <ul class="slides">
-        <li>
-          <!-- New York -->
-          <img src="assets/images/nyc.jpg" />
-          <div class="caption center-align">
-            <h3>Your destination awaits...</h3>
-            <a
-              class="waves-effect waves-light btn-large blue darken-3 start-btn"
-              ><i class="material-icons left">search</i>Begin Your Search</a
-            >
-          </div>
-        </li>
-        <li>
-          <!-- Arches -->
-          <img src="assets/images/arches.jpg" />
-          <div class="caption right-align">
-            <h3>Arches National Park</h3>
-            <a
-              class="waves-effect waves-light btn-large pink darken-4 start-btn"
-              ><i class="material-icons left">search</i>Begin Your Search</a
-            >
-          </div>
-        </li>
-        <li>
-          <!-- Washington D.C. -->
-          <img src="assets/images/dc.jpg" />
-          <div class="caption right-left">
-            <h3>Washington D.C.</h3>
-            <a
-              class="waves-effect waves-light btn-large indigo darken-4 start-btn"
-              ><i class="material-icons left">search</i>Begin Your Search</a
-            >
-          </div>
-        </li>
-        <li>
-          <!-- San Francisco -->
-          <img src="assets/images/bridge.jpg" />
-          <div class="caption right-align">
-            <h3>San Francisco</h3>
-            <a
-              class="waves-effect waves-light btn-large orange accent-4 start-btn"
-              ><i class="material-icons left">search</i>Begin Your Search</a
-            >
-          </div>
-        </li>
-      </ul>
-    </div>
-    <!-- End of slider -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style/style.css" />
+  <title>Document</title>
+</head>
 
-    <!-- Main content -->
-    <div id="main-content">
-      <!-- Navbar  -->
-      <nav>
-        <div class="nav-wrapper blue-grey lighten-5">
-          <a
-            href="index.html"
-            class="brand-logo blue-grey-text text-darken-3"
-            style="margin-left: 1rem;"
-            >PHAJ Around The World</a
-          >
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li>
-              <a href="favorites.html">
-                <i
-                  class="material-icons blue-grey-text text-darken-3"
-                  style="font-size: 30px; margin-right: 1rem;"
-                  >star</i
-                ></a
-              >
-            </li>
-          </ul>
+<body>
+  <!-- Slider -->
+  <div class="slider fullscreen">
+    <ul class="slides">
+      <li>
+        <!-- New York -->
+        <img src="assets/images/nyc.jpg" />
+        <div class="caption center-align">
+          <h3>Your destination awaits...</h3>
+          <a class="waves-effect waves-light btn-large blue darken-3 start-btn"><i
+              class="material-icons left">search</i>Begin Your Search</a>
         </div>
-      </nav>
-      <!-- End of navbar -->
-
-      <!-- Back button -->
-      <div class="row hide" id="back-button">
-        <a class="waves-effect waves-light btn-large" id="backCurrent"
-          ><i class="material-icons right">explore</i>Go Back</a
-        >
-      </div>
-
-      <!-- Favorites modal -->
-      <div id="modal1" class="modal bottom-sheet">
-        <div class="modal-content">
-          <h4>Favorites</h4>
-          <p>A bunch of text</p>
+      </li>
+      <li>
+        <!-- Arches -->
+        <img src="assets/images/arches.jpg" />
+        <div class="caption right-align">
+          <h3>Arches National Park</h3>
+          <a class="waves-effect waves-light btn-large pink darken-4 start-btn"><i
+              class="material-icons left">search</i>Begin Your Search</a>
         </div>
-      </div>
-
-      <!-- Choose to search cities or parks -->
-      <div class="row">
-        <div class="col s12" style="margin-top: 3rem;" id="start-buttons">
-          <!-- Search cities card -->
-          <div class="col s2"></div>
-          <div class="col s4">
-            <div class="card">
-              <div class="card-image">
-                <img src="assets/images/sanfran.jpg" />
-                <span class="card-title">Cities</span>
-                <a
-                  class="btn-floating halfway-fab waves-effect waves-light deep-purple darken-4"
-                  id="cities-start"
-                  ><i class="material-icons">search</i></a
-                >
-              </div>
-              <div class="card-content blue-grey lighten-5">
-                <p>Search for travel information on any U.S city</p>
-                <hr />
-                <ul>
-                  <li>Food and Drink</li>
-                  <li>Sites</li>
-                  <li>Arts and more!</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- Search parks card -->
-          <div class="col s4">
-            <div class="card">
-              <div class="card-image">
-                <img src="assets/images/natpark.jpg" />
-                <span class="card-title">National Parks</span>
-                <a
-                  class="btn-floating halfway-fab waves-effect waves-light orange accent-4"
-                  id="parks-start"
-                  ><i class="material-icons">search</i></a
-                >
-              </div>
-              <div class="card-content blue-grey lighten-5">
-                <p>Find results on over 50 U.S National Parks</p>
-                <hr />
-                <ul>
-                  <li>Weather</li>
-                  <li>Directions</li>
-                  <li>Park Info</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col s2"></div>
+      </li>
+      <li>
+        <!-- Washington D.C. -->
+        <img src="assets/images/dc.jpg" />
+        <div class="caption right-left">
+          <h3>Washington D.C.</h3>
+          <a class="waves-effect waves-light btn-large indigo darken-4 start-btn"><i
+              class="material-icons left">search</i>Begin Your Search</a>
         </div>
-      </div>
-      <!-- End of choose search -->
-    </div>
-    <!-- End of main content -->
-
-    <!-- Search cities form -->
-    <div class="row">
-      <form class="col s12 hide" id="city-search">
-        <div class="row">
-          <div class="input-field col s3">
-            <input id="city" type="text" class="grey-text text-lighten-1" />
-            <label for="city">City</label>
-          </div>
-          <div class="input-field col s3">
-            <input
-              id="state"
-              type="text"
-              class="autocomplete grey-text text-lighten-1"
-            />
-            <label for="state">State (e.g. UT, NY, CA)</label>
-          </div>
-          <div class="col s3">
-            <a
-              class="btn-floating btn-large waves-effect waves-light deep-purple darken-4"
-              id="search-cities"
-              style="margin-top: .5rem;"
-              ><i class="material-icons" style="font-size: 35px;"
-                >keyboard_arrow_down</i
-              ></a
-            >
-          </div>
+      </li>
+      <li>
+        <!-- San Francisco -->
+        <img src="assets/images/bridge.jpg" />
+        <div class="caption right-align">
+          <h3>San Francisco</h3>
+          <a class="waves-effect waves-light btn-large orange accent-4 start-btn"><i
+              class="material-icons left">search</i>Begin Your Search</a>
         </div>
-      </form>
-    </div>
+      </li>
+    </ul>
+  </div>
+  <!-- End of slider -->
 
-    <!-- Search parks form -->
-    <div class="row">
-      <form class="col s12 hide" id="parks-search">
-        <div class="row">
-          <div class="input-field col s3">
-            <input id="parks" type="text" class="grey-text text-lighten-1" />
-            <label for="parks">Parks</label>
-          </div>
-          <div class="col s3">
-            <a
-              class="btn-floating btn-large waves-effect waves-light orange accent-4"
-              id="search-parks"
-              style="margin-top: .5rem;"
-              ><i class="material-icons" style="font-size: 35px;"
-                >keyboard_arrow_down</i
-              ></a
-            >
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <!-- Carousel with API images -->
-    <div class="row">
-      <div class="col s12">
-        <div class="carousel">
-          <a class="carousel-item" href="#one!" id="one"></a>
-          <a class="carousel-item" href="#two!" id="two"></a>
-          <a class="carousel-item" href="#three!" id="three"></a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Results card -->
-    <div class="row">
-      <div class="col s6 offset-m3">
-        <ul class="collapsible popout z-depth-5" id="results-card">
-          <!-- Weather -->
+  <!-- Main content -->
+  <div id="main-content">
+    <!-- Navbar  -->
+    <nav>
+      <div class="nav-wrapper blue-grey lighten-5">
+        <a href="index.html" class="brand-logo blue-grey-text text-darken-3" style="margin-left: 1rem;">PHAJ Around The
+          World</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li>
-            <div class="collapsible-header z-depth-3">
-              <i class="material-icons">filter_drama</i>Weather
-            </div>
-            <div class="collapsible-body" id="weather"></div>
+            <a href="favorites.html">
+              <i class="material-icons blue-grey-text text-darken-3"
+                style="font-size: 30px; margin-right: 1rem;">star</i></a>
           </li>
-          <!-- Map -->
-          <li>
-            <div class="collapsible-header z-depth-3">
-              <i class="material-icons">place</i>Map
-            </div>
-            <div class="collapsible-body" id="maps"></div>
-          </li>
-          <!-- Info -->
-          <li>
-            <div class="collapsible-header z-depth-3">
-              <i class="material-icons">info_outline</i>Info
-            </div>
-            <div class="collapsible-body">
-              <!-- Parks search - parks info -->
-              <div id="park-info"></div>
-
-              <!-- City search - search for places by category -->
-              <div id="display-places">
-                <h5>Recommended Places</h5>
-                <select class="icons" id="sections">
-                  <option class="option">Select a category</option>
-                  <option class="option" value="trending">Trending</option>
-                  <option class="option" value="arts">Arts</option>
-                  <option class="option" value="drinks">Drinks</option>
-                  <option class="option" value="food">Food</option>
-                  <option class="option" value="outdoors">Outdoors</option>
-                  <option class="option" value="sights">Sights</option>
-                </select>
-                <!-- Display five places in selected category -->
-                <div id="places"></div>
-              </div>
-            </div>
-          </li>
-          <!-- End of info -->
         </ul>
       </div>
-    </div>
-    <!-- End of results card -->
+    </nav>
+    <!-- End of navbar -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="assets/js/app.js"></script>
-  </body>
+    <!-- Back button -->
+    <div class="row hide" id="back-button">
+      <a class="waves-effect waves-light btn-large" id="backCurrent"><i class="material-icons right">explore</i>Go
+        Back</a>
+    </div>
+
+    <!-- Favorites modal -->
+    <div id="modal1" class="modal bottom-sheet">
+      <div class="modal-content">
+        <h4>Favorites</h4>
+        <p>A bunch of text</p>
+      </div>
+    </div>
+
+    <!-- Choose to search cities or parks -->
+    <div class="row">
+      <div class="col s12" style="margin-top: 3rem;" id="start-buttons">
+        <!-- Search cities card -->
+        <div class="col s2"></div>
+        <div class="col s4">
+          <div class="card">
+            <div class="card-image">
+              <img src="assets/images/sanfran.jpg" />
+              <span class="card-title">Cities</span>
+              <a class="btn-floating halfway-fab waves-effect waves-light deep-purple darken-4" id="cities-start"><i
+                  class="material-icons">search</i></a>
+            </div>
+            <div class="card-content blue-grey lighten-5">
+              <p>Search for travel information on any U.S city</p>
+              <hr />
+              <ul>
+                <li>Food and Drink</li>
+                <li>Sites</li>
+                <li>Arts and more!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- Search parks card -->
+        <div class="col s4">
+          <div class="card">
+            <div class="card-image">
+              <img src="assets/images/natpark.jpg" />
+              <span class="card-title">National Parks</span>
+              <a class="btn-floating halfway-fab waves-effect waves-light orange accent-4" id="parks-start"><i
+                  class="material-icons">search</i></a>
+            </div>
+            <div class="card-content blue-grey lighten-5">
+              <p>Find results on over 50 U.S National Parks</p>
+              <hr />
+              <ul>
+                <li>Weather</li>
+                <li>Directions</li>
+                <li>Park Info</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col s2"></div>
+      </div>
+    </div>
+    <!-- End of choose search -->
+  </div>
+  <!-- End of main content -->
+
+  <!-- Search cities form -->
+  <div class="row">
+    <form class="col s12 hide" id="city-search">
+      <div class="row">
+        <div class="input-field col s3">
+          <input id="city" type="text" class="grey-text text-lighten-1" />
+          <label for="city">City</label>
+        </div>
+        <div class="input-field col s3">
+          <input id="state" type="text" class="autocomplete grey-text text-lighten-1" />
+          <label for="state">State (e.g. UT, NY, CA)</label>
+        </div>
+        <div class="col s3">
+          <a class="btn-floating btn-large waves-effect waves-light deep-purple darken-4" id="search-cities"
+            style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Search parks form -->
+  <div class="row">
+    <form class="col s12 hide" id="parks-search">
+      <div class="row">
+        <div class="input-field col s3">
+          <input id="parks" type="text" class="grey-text text-lighten-1 validate" />
+          <label for="parks">Park Name</label>
+          <span class="helper-text" data-error="wrong" data-success="Searching...">Helper text</span>
+        </div>
+        <div class="col s3">
+          <a class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
+            style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Carousel with API images -->
+  <div class="row">
+    <div class="col s12">
+      <div class="carousel" id="image-card">
+        <a class="carousel-item" href="#one!" id="one"></a>
+        <a class="carousel-item" href="#two!" id="two"></a>
+        <a class="carousel-item" href="#three!" id="three"></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results card -->
+  <div class="row">
+    <div class="col s6 offset-m3">
+      <ul class="collapsible popout z-depth-5" id="results-card">
+        <!-- Weather -->
+        <li>
+          <div class="collapsible-header z-depth-3">
+            <i class="material-icons">filter_drama</i>Weather
+          </div>
+          <div class="collapsible-body" id="weather"></div>
+        </li>
+        <!-- Map -->
+        <li>
+          <div class="collapsible-header z-depth-3">
+            <i class="material-icons">place</i>Map
+          </div>
+          <div class="collapsible-body" id="maps"></div>
+        </li>
+        <!-- Info -->
+        <li>
+          <div class="collapsible-header z-depth-3">
+            <i class="material-icons">info_outline</i>Info
+          </div>
+          <div class="collapsible-body">
+            <!-- Parks search - parks info -->
+            <div id="park-info"></div>
+
+            <!-- City search - search for places by category -->
+            <div id="display-places">
+              <h5>Recommended Places</h5>
+              <select class="icons" id="sections">
+                <option class="option">Select a category</option>
+                <option class="option" value="trending">Trending</option>
+                <option class="option" value="arts">Arts</option>
+                <option class="option" value="drinks">Drinks</option>
+                <option class="option" value="food">Food</option>
+                <option class="option" value="outdoors">Outdoors</option>
+                <option class="option" value="sights">Sights</option>
+              </select>
+              <!-- Display five places in selected category -->
+              <div id="places"></div>
+            </div>
+          </div>
+        </li>
+        <!-- End of info -->
+      </ul>
+    </div>
+  </div>
+  <!-- End of results card -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+
 </html>
