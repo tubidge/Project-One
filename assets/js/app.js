@@ -8,61 +8,61 @@ $(document).ready(function () {
 		duration: 700,
 		indicators: false,
 	});
-	
+
 	$('input.autocomplete').autocomplete({
 		data: {
-		"AL": null,
-		"AK": null,
-		"AZ": null,
-		"AR": null,
-		"CA": null,
-		"CO": null,
-		"CT": null,
-		"DE": null,
-		"FL": null,
-		"GA": null,
-		"HI": null,
-		"ID": null,
-		"IL": null,
-		"IN": null,
-		"IA": null,
-		"KS": null,
-		"KY": null,
-		"LA": null,
-		"ME": null,
-		"MD": null,
-		"MA": null,
-		"MI": null,
-		"MN": null,
-		"MS": null,
-		"MO": null,
-		"MT": null,
-		"NE": null,
-		"NV": null,
-		"NH": null,
-		"NJ": null,
-		"NM": null,
-		"NY": null,
-		"NC": null,
-		"ND": null,
-		"OH": null,
-		"OK": null,
-		"OR": null,
-		"PA": null,
-		"RI": null,
-		"SC": null,
-		"SD": null,
-		"TN": null,
-		"TX": null,
-		"UT": null,
-		"VT": null,
-		"VA": null,
-		"WA": null,
-		"WV": null,
-		"WI": null,
-		"WY": null,
-		"DC": null,
-		"PR": null,
+			"AL": null,
+			"AK": null,
+			"AZ": null,
+			"AR": null,
+			"CA": null,
+			"CO": null,
+			"CT": null,
+			"DE": null,
+			"FL": null,
+			"GA": null,
+			"HI": null,
+			"ID": null,
+			"IL": null,
+			"IN": null,
+			"IA": null,
+			"KS": null,
+			"KY": null,
+			"LA": null,
+			"ME": null,
+			"MD": null,
+			"MA": null,
+			"MI": null,
+			"MN": null,
+			"MS": null,
+			"MO": null,
+			"MT": null,
+			"NE": null,
+			"NV": null,
+			"NH": null,
+			"NJ": null,
+			"NM": null,
+			"NY": null,
+			"NC": null,
+			"ND": null,
+			"OH": null,
+			"OK": null,
+			"OR": null,
+			"PA": null,
+			"RI": null,
+			"SC": null,
+			"SD": null,
+			"TN": null,
+			"TX": null,
+			"UT": null,
+			"VT": null,
+			"VA": null,
+			"WA": null,
+			"WV": null,
+			"WI": null,
+			"WY": null,
+			"DC": null,
+			"PR": null,
 		},
 	});
 
@@ -78,61 +78,13 @@ $(document).ready(function () {
 	var park;
 	var search;
 	var queryURL;
-	
+	var queryNum = 0;
+	var images = [];
+	const numbers = ['one', 'two', 'three'];
+
 	// Data Validation
 	var states = [
-	"AL",
-	"AK",
-	"AZ",
-	"AR",
-	"CA",
-	"CO",
-	"CT",
-	"DE",
-	"FL",
-	"GA",
-	"HI",
-	"ID",
-	"IL",
-	"IN",
-	"IA",
-	"KS",
-	"KY",
-	"LA",
-	"ME",
-	"MD",
-	"MA",
-	"MI",
-	"MN",
-	"MS",
-	"MO",
-	"MT",
-	"NE",
-	"NV",
-	"NH",
-	"NJ",
-	"NM",
-	"NY",
-	"NC",
-	"ND",
-	"OH",
-	"OK",
-	"OR",
-	"PA",
-	"RI",
-	"SC",
-	"SD",
-	"TN",
-	"TX",
-	"UT",
-	"VT",
-	"VA",
-	"WA",
-	"WV",
-	"WI",
-	"WY",
-	"DC",
-	"PR",
+		"AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC", "PR"
 	];
 
 	// API keys
@@ -153,34 +105,32 @@ $(document).ready(function () {
 		$.ajax({
 			url: queryURL,
 			method: 'GET'
-		}).then(function (res) {
+		}).done(function (res) {
 			console.log(`Images: ${queryURL}`);
 			// Array to add id to each image
-			const numbers = ['one', 'two', 'three'];
-			var images = [];
-			city = $('#city').val().trim();  
+			city = $('#city').val().trim();
 			state = $('#state').val().trim();
-			
+
 			for (var i = 0; i < res.results.length; i++) {
 				var src = res.results[i].urls.small;
 				var likes = res.results[i].user.total_likes;
-				var tags = res.results[i].tags; 
+				var tags = res.results[i].tags;
 				var photoTags = res.results[i].photo_tags;
-				
+
 				if (images.length < numbers.length) {
 					if (likes > 0) {
-						for (var j = 0; j < tags.length; j++) { 
-							var tag = tags[j].title; 
-							
+						for (var j = 0; j < tags.length; j++) {
+							var tag = tags[j].title;
+
 							if (tag === city || tag === "usa" || tag === "resort" || tag === "nature" || tag === "city" || tag === "mountains" || tag === "beach" || tag === "snow" || tag === "cityscape" || tag === "skyline" || tag === "landscape" || tag === "downtown" || tag === "theme park" || tag === "park") {
-								if (images.indexOf(src) === -1) {	
-										images.push(src);
-									}
+								if (images.indexOf(src) === -1) {
+									images.push(src);
 								};
 							};
-						for (var k = 0; k < photoTags.length; k++) { 
-							var photoTag = photoTags[k].title; 
-							
+						};
+						for (var k = 0; k < photoTags.length; k++) {
+							var photoTag = photoTags[k].title;
+
 							if (photoTag === "person" || photoTag === "man" || photoTag === "woman" || photoTag === "face" || photoTag === "old" || photoTag === "human" || photoTag === "sign" || photoTag === "traffic" || photoTag === "animal") {
 								var index = images.indexOf(src);
 								images.splice(index, 1);
@@ -189,11 +139,9 @@ $(document).ready(function () {
 					};
 				};
 			};
-			
-			if(images.length < numbers.length) {
-				console.log("not enough images");		
+			if (images.length < numbers.length) {
+				console.log("not enough images");
 			};
-			
 			for (var i = 0; i < numbers.length; i++) {
 				var newImage = $(`<img src="${images[i]}">`);
 				$(`#${numbers[i]}`).html(newImage);
@@ -202,7 +150,7 @@ $(document).ready(function () {
 			$('#results-card').show();
 		});
 	};
-	
+
 	// Render list of places
 	function runQueryPlaces(queryURL) {
 		$.ajax({
@@ -227,18 +175,6 @@ $(document).ready(function () {
 				newPlaceLink.text(`${name} - ${category}`);
 				newPlace.html(newPlaceLink);
 				$('#places').append(newPlace);
-			};
-		});
-	};
-
-	// Render national park info
-	function runQueryParksAll(queryURL) {
-		$.ajax({
-			url: queryURL,
-			method: 'GET',
-		}).then(function (res) {
-			for (var i = 0; i < res.data.length; i++) {
-				console.log(res.data[i].name);
 			};
 		});
 	};
@@ -284,22 +220,24 @@ $(document).ready(function () {
 		$('#display-places').show();
 
 		// Search parameters		
-		var city = $('#city').val().trim();  
-		city = city.replace(/ /g, "%20");  
+		var city = $('#city').val().trim();
+		city = city.replace(/ /g, "%20");
 		state = $('#state').val().trim();
 		state = state.toUpperCase();
 		if (states.indexOf(state) === -1) {
-			M.toast({html: "That's not a valid state"})
+			M.toast({
+				html: "That's not a valid state"
+			})
 		} else {
 			// Display images
 			$('.carousel').show();
 			search = `${city}%20${state}`;
-			queryURL = `${queryURLBaseImages}&query=${search}`;
-			
+			queryURL = `${queryURLBaseImages}&query=${search}&page=1&per_page=30`;
+
 			runQueryImages(queryURL);
 		};
 	});
-	
+
 	// Search national parks
 	$('#search-parks').on('click', function () {
 		// Display images
@@ -333,8 +271,8 @@ $(document).ready(function () {
 			if (opt[i].selected === true) {
 				var currentSection = opt[i].value;
 				// Render list of places
-				var city = $('#city').val().trim();  
-				city = city.replace(/ /g, "%20"); 
+				var city = $('#city').val().trim();
+				city = city.replace(/ /g, "%20");
 				var state = $('#state').val().trim();
 				var search = (`${city},${state}`);
 				var section = currentSection;
