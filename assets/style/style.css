@@ -148,3 +148,18 @@ table {
 #forecast td:last-child {
     border-right: none;
 }
+
+.fav-search:hover {
+    opacity: 1;
+}
+
+#favorite-list {
+    font-family: 'Amatic SC', cursive;
+    font-weight: bold;
+
+}
+
+#favorite-list span {
+    font-size: 2.5rem !important;
+    margin-top: 1rem;
+}

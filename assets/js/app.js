@@ -1,3 +1,16 @@
+var config = {
+    apiKey: "AIzaSyCW6ZM7sC6YZq_9zl8VFcf8nK2IlYfzKKA",
+    authDomain: "group-project-1-4ed9a.firebaseapp.com",
+    databaseURL: "https://group-project-1-4ed9a.firebaseio.com",
+    projectId: "group-project-1-4ed9a",
+    storageBucket: "group-project-1-4ed9a.appspot.com",
+    messagingSenderId: "256297252067"
+};
+
+firebase.initializeApp(config);
+
+var database = firebase.database()
+
 $(document).ready(function () {
     M.AutoInit();
     // INITIAL DISPLAY
@@ -88,6 +101,8 @@ $(document).ready(function () {
     var windDirection = "";
     var parkResults = true;
     var hikingTrails = [];
+    var favImage = [];
+    var currentTitle = '';
     const numbers = ['one', 'two', 'three'];
     // Data Validation
     var states = [
@@ -196,6 +211,7 @@ $(document).ready(function () {
                 var str = tags;
                 var height = hits[i].webformatHeight;
                 city = $('#city').val().trim();
+
                 city = city.toLowerCase();
                 state = $('#state').val().trim();
                 state = state.toLowerCase();
@@ -206,6 +222,9 @@ $(document).ready(function () {
                     };
                 };
             };
+            favImage = [];
+            favImage.push(images[0]);
+
             if (images.length > 2) {
                 // Array to add id to each image
                 var numbers = ['one', 'two', 'three'];
@@ -270,6 +289,9 @@ $(document).ready(function () {
             console.log(parkResults)
             var results = res.data;
             var length = results.length;
+
+
+
             // added a if/then statement to check and make sure we get a proper ajax response
             if (length == 0) {
                 parkResults = false;
@@ -277,15 +299,19 @@ $(document).ready(function () {
                 $('#results-card').css('display', 'none');
                 parkSearchTimeout()
             } else {
+
                 parkSearchTimeout()
                 runQueryImages(queryURL2)
+
+
+
                 for (var i = 0; i < length; i++) {
                     var currentResult = results[i];
-                    console.log(currentResult.name.toLowerCase())
-                    console.log(park)
-                    console.log(currentResult.fullname.toLowerCase())
+
                     if (currentResult.name.toLowerCase() === park || currentResult.fullname.toLowerCase() === park) {
                         console.log('working')
+                        currentTitle = currentResult.fullname;
+                        console.log(currentTitle)
                         console.log(currentResult.description)
                         console.log(currentResult.directionsinfo)
                         console.log(currentResult.weatherinfo)
@@ -299,6 +325,8 @@ $(document).ready(function () {
                         $('#park-info').append(description).append(directions);
                     };
                 };
+
+
                 // Weather Forecast API call for national Parks
                 var latLong = results[0].latlong.split(", ");
                 var lat = Math.floor(latLong[0].slice(4, -1));
@@ -412,7 +440,7 @@ $(document).ready(function () {
                     row6.append(day5Humidity);
                 });
                 // Hiking Trails Call
-                var hikingURL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${long}&maxDistance=100&key=${hikesKey}`;
+                var hikingURL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${long}&maxDistance=50&key=${hikesKey}`;
                 $.ajax({
                     url: hikingURL,
                     method: "GET"
@@ -421,7 +449,7 @@ $(document).ready(function () {
                     var results = hike.trails;
                     hikingTrails = [];
                     for (i = 0; i < results.length; i++) {
-                        var btn = $('<a>').addClass('waves-effect waves-light btn hike').text(results[i].name).css('display', 'block');
+                        var btn = $('<a>').addClass('waves-effect waves-light btn hike orange accent-3').text(results[i].name).css('display', 'block');
                         btn.attr('data-number', i)
                         $('#trails').append(btn)
                         var trail = results[i].name;
@@ -442,6 +470,8 @@ $(document).ready(function () {
                     }
                     console.log(hikingTrails)
                 })
+
+
             };
         });
     };
@@ -638,10 +668,13 @@ $(document).ready(function () {
             })
             $('#state').val('');
         } else {
+
             var cityDisplay = $('#city').val().trim();
             cityDisplay = cityDisplay.toUpperCase();
+
             var stateDisplay = $('#state').val().trim();
             stateDisplay = stateDisplay.toUpperCase();
+            currentTitle = `${cityDisplay}, ${stateDisplay}`;
             var searchResult = (`${cityDisplay}, ${stateDisplay}`);
             var currentResult = $(`<h1 class="center-align white-text">${searchResult}</h1>`);
             $('#current-result').show();
@@ -666,10 +699,14 @@ $(document).ready(function () {
         $('#image-card').hide();
         $('.helper-text').attr('data-success', 'Searching...');
         $("#display-places").css("display", "none");
+        $('#trails').empty();
         park = $("#parks").val().trim().toLowerCase();
         var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
         var parkImageURL = `${queryURLBaseImages}&q=${park}`;
         runQueryParks(parkInfoURL, parkImageURL);
+
+
+
     });
     // Get selected section
     $(document).on('change', '#sections', function () {
@@ -772,6 +809,47 @@ $(document).ready(function () {
             }
         });
     }
+
+
+    $(document).on('click', '.favButton', function () {
+        database.ref('/Image').push({
+            title: currentTitle,
+            img: favImage[0]
+
+        })
+
+
+
+    })
+
+    database.ref('/Image').on('child_added', function (snap) {
+        var favCard = $('<div>').addClass('card trail-card');
+        var favImage = $('<div>').addClass('card-image');
+        var favPic = $('<img>');
+        favPic.attr('src', snap.val().img)
+        favPic.css('height', '25rem')
+        var title = $('<span>').addClass('card-title').text(snap.val().title);
+        var search = $('<i>').addClass('material-icons black-text').text('search')
+        var btn = $('<a>').addClass('btn-floating halfway-fab waves-effect waves-light fav-search').css({
+            'margin-bottom': '3.5rem',
+            'text-align': 'center',
+            'background-color': 'white',
+            'opacity': '.8',
+
+
+        }).html(search)
+        favImage.append(favPic).append(title).append(btn)
+        favCard.append(favImage)
+        favCard.css({
+            "width": "25rem",
+            "display": "inline-block",
+            'margin': '1rem'
+
+        })
+        $('#favorite-list').append(favCard)
+    })
+
+    // Get the input field
 
     var input = $('#state');
     // Execute a function when the user releases a key on the keyboard
