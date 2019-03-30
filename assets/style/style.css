@@ -12,7 +12,7 @@ html {
     display: none;
 }
 
-.card {
+#start-buttons .card {
     display: none;
 }
 
@@ -33,4 +33,30 @@ html {
 
 li {
     list-style-type: initial !important;
+}
+
+.nav-wrapper li:first-child {
+    list-style-type: none !important;
+}
+
+table {
+    border-collapse: unset !important;
+}
+
+
+#weather tr:hover {
+    transform: scale(1.01);
+    background: lightgreen;
+}
+
+
+#forecast td {
+    text-align: center;
+    border-right: 2px solid black;
+    border-top: none;
+    border-bottom: none;
+}
+
+#forecast td:last-child {
+    border-right: none;
 }

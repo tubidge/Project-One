@@ -75,10 +75,12 @@ $(document).ready(function () {
     var search;
     var queryURL;
     var key = "fe8bb39cf6f11fec454d5ca72722773e";
+    var hikesKey = '200439802-40135efa1850c123fbd61e5f8746dc12';
     var forecastApiResponse = {};
     var windDirection = "";
     var parkResults = true;
     const numbers = ['one', 'two', 'three'];
+    var hikingTrails = [];
     // Data Validation
     var states = [
         "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC", "PR"
@@ -216,12 +218,183 @@ $(document).ready(function () {
                         var directions = $('<p>').text(currentResult.directionsinfo)
                         console.log(description);
                         console.log(directions);
-                        $("#weather").empty();
+                        $("#general-weather").empty();
                         $("#park-info").empty();
-                        $("#weather").append(currentResult.weatherinfo);
+                        $("#general-weather").append(currentResult.weatherinfo);
                         $('#park-info').append(description).append(directions);
                     };
                 };
+                // Weather Forecast API call for national Parks
+
+                var latLong = results[0].latlong.split(", ");
+
+                var lat = Math.floor(latLong[0].slice(4, -1));
+                var long = Math.floor(latLong[1].slice(5, -1));
+
+
+
+                var queryURL =
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=imperial&appid=${key}`;
+                var encodeURL = encodeURI(queryURL);
+                console.log(encodeURL);
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    console.log(response)
+                    $('#weather').empty()
+                    // Create a table to hold weather data on page.
+                    var table = $("#weather");
+                    // Adding temperature to page.
+                    var currentTemp = $("<tr>").text(`Current Temperature: ${response.main.temp} F`);
+                    table.append(currentTemp);
+                    // Adding wind speed to page.
+                    var windSpeed = $("<tr>").text(`Wind Speed: ${response.wind.speed} mph`);
+                    table.append(windSpeed);
+                    // Calling function to calculate wind direction.
+                    calcWindDir(response.wind.deg);
+                    // Adding wind direction to page.
+                    var windDir = $("<tr>").text(`Wind Direction: ${windDirection}`);
+                    table.append(windDir);
+                    // Adding humidity to page.
+                    var humid = $("<tr>").text(`Humidity: ${response.main.humidity}%`);
+                    table.append(humid);
+
+                });
+
+                // Forecast Call
+
+                var forecastURL =
+                    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&units=imperial&appid=${key}`;
+                var encodeURL = encodeURI(forecastURL);
+                console.log(encodeURL)
+                $.ajax({
+                    url: forecastURL,
+                    method: "GET"
+                }).then(function (results) {
+                    $('#row1, #row2, #row3, #row4, #row5, #row6').empty();
+                    forecastApiResponse = results;
+                    console.log(`Forecast Response: ${forecastApiResponse}`);
+                    var day1 = forecastApiResponse.list[5];
+                    var day2 = forecastApiResponse.list[13];
+                    var day3 = forecastApiResponse.list[21];
+                    var day4 = forecastApiResponse.list[29];
+                    var day5 = forecastApiResponse.list[37];
+
+                    $("#row1").html("<th> 5 Day Forecast </th>");
+
+                    var row2 = $("#row2");
+                    var day1Date = $("<th>").text(moment.unix(day1.dt).format("MMM Do YYYY"));
+                    var day2Date = $("<th>").text(moment.unix(day2.dt).format("MMM Do YYYY"));
+                    var day4Date = $("<th>").text(moment.unix(day4.dt).format("MMM Do YYYY"));
+                    var day3Date = $("<th>").text(moment.unix(day3.dt).format("MMM Do YYYY"));
+                    var day5Date = $("<th>").text(moment.unix(day5.dt).format("MMM Do YYYY"));
+                    row2.append(day1Date);
+                    row2.append(day2Date);
+                    row2.append(day3Date);
+                    row2.append(day4Date);
+                    row2.append(day5Date);
+
+                    var row3 = $("#row3");
+                    var day1Temp = $("<td>").text(`Temperature: ${day1.main.temp}`)
+                    var day2Temp = $("<td>").text(`Temperature: ${day2.main.temp}`);
+                    var day3Temp = $("<td>").text(`Temperature: ${day3.main.temp}`);
+                    var day4Temp = $("<td>").text(`Temperature: ${day4.main.temp}`);
+                    var day5Temp = $("<td>").text(`Temperature: ${day5.main.temp}`);
+                    row3.append(day1Temp);
+                    row3.append(day2Temp);
+                    row3.append(day3Temp);
+                    row3.append(day4Temp);
+                    row3.append(day5Temp);
+
+                    var row4 = $("#row4");
+                    var day1WindSpeed = $("<td>").text(`Wind Speed: ${day1.wind.speed} mph`);
+                    var day2WindSpeed = $("<td>").text(`Wind Speed: ${day2.wind.speed} mph`);
+                    var day3WindSpeed = $("<td>").text(`Wind Speed: ${day3.wind.speed} mph`);
+                    var day4WindSpeed = $("<td>").text(`Wind Speed: ${day4.wind.speed} mph`);
+                    var day5WindSpeed = $("<td>").text(`Wind Speed: ${day5.wind.speed} mph`);
+                    row4.append(day1WindSpeed);
+                    row4.append(day2WindSpeed);
+                    row4.append(day3WindSpeed);
+                    row4.append(day4WindSpeed);
+                    row4.append(day5WindSpeed);
+
+                    var row5 = $("#row5");
+                    calcWindDir(day1.wind.deg);
+                    var day1WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day2.wind.deg);
+                    var day2WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day3.wind.deg);
+                    var day3WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day4.wind.deg);
+                    var day4WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day5.wind.deg);
+                    var day5WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    row5.append(day1WindDir);
+                    row5.append(day2WindDir);
+                    row5.append(day3WindDir);
+                    row5.append(day4WindDir);
+                    row5.append(day5WindDir);
+
+                    var row6 = $("#row6");
+                    var day1Humidity = $("<td>").text(`Humidity: ${day1.main.humidity}%`);
+                    var day2Humidity = $("<td>").text(`Humidity: ${day2.main.humidity}%`);
+                    var day3Humidity = $("<td>").text(`Humidity: ${day3.main.humidity}%`);
+                    var day4Humidity = $("<td>").text(`Humidity: ${day4.main.humidity}%`);
+                    var day5Humidity = $("<td>").text(`Humidity: ${day5.main.humidity}%`);
+                    row6.append(day1Humidity);
+                    row6.append(day2Humidity);
+                    row6.append(day3Humidity);
+                    row6.append(day4Humidity);
+                    row6.append(day5Humidity);
+                });
+
+                // Hiking Trails Call
+
+                var hikingURL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${long}&maxDistance=100&key=${hikesKey}`;
+                $.ajax({
+                    url: hikingURL,
+                    method: "GET"
+                }).then(function (hike) {
+                    console.log(hike);
+                    var results = hike.trails;
+                    hikingTrails = [];
+
+
+
+                    for (i = 0; i < results.length; i++) {
+                        var btn = $('<a>').addClass('waves-effect waves-light btn hike').text(results[i].name).css('display', 'block');
+                        btn.attr('data-number', i)
+                        $('#trails').append(btn)
+
+                        var trail = results[i].name;
+                        var trailPic = results[i].imgMedium;
+
+                        var trailRating = results[i].stars;
+
+                        var difficulty = results[i].difficulty;
+
+                        var status = results[i].conditionStatus;
+
+                        var description = results[i].summary;
+
+                        var trailObject = {
+                            trail: trail,
+                            trailPic: trailPic,
+                            trailRating: trailRating,
+                            difficulty: difficulty,
+                            status: status,
+                            description: description
+
+                        }
+
+                        hikingTrails.push(trailObject);
+
+
+
+                    }
+                    console.log(hikingTrails)
+                })
             };
         });
     };
@@ -469,4 +642,30 @@ $(document).ready(function () {
         currentWeatherCall();
         forecastCall();
     });
+
+    $(document).on('click', '.hike', function () {
+        $('.trail-card').remove();
+        var event = $(this).attr('data-number');
+        console.log(hikingTrails[event]);
+        var trail = hikingTrails[event];
+        var trailCard = $('<div>').addClass('card trail-card');
+        var trailImage = $('<div>').addClass('card-image');
+        var trailPic = $('<img>');
+        trailPic.attr('src', trail.trailPic)
+        var title = $('<span>').addClass('card-title').text(trail.trail);
+        trailImage.append(trailPic).append(title);
+        trailCard.append(trailImage)
+        var list = $('<ul>').css('margin-left', '2rem')
+        var trailRating = $('<li>').text(`Average Rating: ${trail.trailRating}`)
+        var difficulty = $('<li>').text(`Trail Difficulty: ${trail.difficulty}`)
+        var status = $('<li>').text(`Trail Status: ${trail.status}`)
+        list.append(trailRating).append(difficulty).append(status);
+        var description = $('<p>').text(trail.description);
+        trailCard.append(list).append(description)
+
+
+
+        trailCard.insertAfter(this)
+    })
+
 });

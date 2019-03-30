@@ -59,15 +59,12 @@
   <div id="main-content">
     <!-- Navbar  -->
     <nav>
-      <div class="nav-wrapper blue-grey lighten-5">
-        <a href="index.html" class="brand-logo blue-grey-text text-darken-3" style="margin-left: 1rem;">PHAJ
-          Around The
-          World</a>
+      <div class="nav-wrapper black">
+
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li>
             <a href="favorites.html">
-              <i class="material-icons blue-grey-text text-darken-3"
-                style="font-size: 30px; margin-right: 1rem;">star</i></a>
+              <i class="material-icons" style="font-size: 30px; margin-right: 1rem;">star</i></a>
           </li>
         </ul>
       </div>
@@ -119,7 +116,7 @@
                   class="material-icons">search</i></a>
             </div>
             <div class="card-content blue-grey lighten-5">
-              <p>Find results on over 50 U.S National Parks</p>
+              <p>Find results on hundreds of U.S National Parks</p>
               <hr />
               <ul>
                 <li>Weather</li>
@@ -140,12 +137,16 @@
     <form class="col s12 hide" id="city-search">
       <div class="row">
         <div class="input-field col s3">
-          <input id="city" type="text" class="grey-text text-lighten-1" />
+          <input id="city" type="text" class="grey-text text-lighten-1 validate" />
           <label for="city">City</label>
+          <span class="helper-text" data-error="No Results Found" data-success=" ">Helper
+            text</span>
+
         </div>
         <div class="input-field col s3">
           <input id="state" type="text" class="autocomplete grey-text text-lighten-1" />
           <label for="state">State (e.g. UT, NY, CA)</label>
+
         </div>
         <div class="col s3">
           <a class="btn-floating btn-large waves-effect waves-light deep-purple darken-4" id="search-cities"
@@ -161,7 +162,7 @@
         <div class="input-field col s3">
           <input id="parks" type="text" class="grey-text text-lighten-1 validate" />
           <label for="parks">Park Name</label>
-          <span class="helper-text" data-error="wrong" data-success="Searching...">Helper text</span>
+          <span class="helper-text" data-error="No Results Found" data-success="Searching...">Helper text</span>
         </div>
         <div class="col s3">
           <a class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
@@ -190,6 +191,7 @@
             <i class="material-icons">filter_drama</i>Weather
           </div>
           <div class="collapsible-body">
+            <p id="general-weather"></p>
             <table id="weather"></table>
             <br>
             <div>
@@ -207,9 +209,12 @@
         <!-- Map -->
         <li>
           <div class="collapsible-header z-depth-3">
-            <i class="material-icons">place</i>Map
+            <i class="material-icons">place</i>Trails
           </div>
-          <div class="collapsible-body" id="maps"></div>
+          <div class="collapsible-body" id="trails">
+
+
+          </div>
         </li>
         <!-- Info -->
         <li>
