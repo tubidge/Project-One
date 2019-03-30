@@ -214,6 +214,7 @@ $(document).ready(function () {
                     var src = images[i];
                     var newImage = $(`<img src="${src}" width="400px">`);
                     $(`#${numbers[i]}`).html(newImage);
+                    $('#image-card').show();
                 };
             } else if (images.length === 1 || images.length === 2) {
                 newImage = $(`<img src="${images[0]}" width="400px">`);
@@ -226,7 +227,6 @@ $(document).ready(function () {
                     html: "No image results"
                 });
             };
-            $('#image-card').show();
             $('#results-card').show();
         });
     };
@@ -238,6 +238,7 @@ $(document).ready(function () {
             method: 'GET'
         }).then(function (res) {
             console.log(`Places: ${queryURL}`);
+            console.log(res);
             $('#display-places').show();
             var venues = res.response.groups[0].items;
             for (var i = 0; i < venues.length; i++) {
@@ -314,11 +315,12 @@ $(document).ready(function () {
                     $('#weather').empty()
                     // Create a table to hold weather data on page.
                     var table = $("#weather");
+                    table.html("<th>Current Weather</th>");
                     // Adding temperature to page.
-                    var currentTemp = $("<tr>").text(`Current Temperature: ${response.main.temp} F`);
+                    var currentTemp = $("<tr>").text("Temperature: " + (Math.round(response.main.temp)) + String.fromCharCode(176) + " F");
                     table.append(currentTemp);
                     // Adding wind speed to page.
-                    var windSpeed = $("<tr>").text(`Wind Speed: ${response.wind.speed} mph`);
+                    var windSpeed = $("<tr>").text(`Wind Speed: ${Math.round(response.wind.speed)} mph`);
                     table.append(windSpeed);
                     // Calling function to calculate wind direction.
                     calcWindDir(response.wind.deg);
@@ -359,22 +361,23 @@ $(document).ready(function () {
                     row2.append(day4Date);
                     row2.append(day5Date);
                     var row3 = $("#row3");
-                    var day1Temp = $("<td>").text(`Temperature: ${day1.main.temp}`)
-                    var day2Temp = $("<td>").text(`Temperature: ${day2.main.temp}`);
-                    var day3Temp = $("<td>").text(`Temperature: ${day3.main.temp}`);
-                    var day4Temp = $("<td>").text(`Temperature: ${day4.main.temp}`);
-                    var day5Temp = $("<td>").text(`Temperature: ${day5.main.temp}`);
+                    var day1Temp = $("<td>").text("Temperature: " + (Math.round(day1.main.temp)) + String.fromCharCode(176) + " F");
+                    var day2Temp = $("<td>").text("Temperature: " + (Math.round(day2.main.temp)) + String.fromCharCode(176) + " F");
+                    var day3Temp = $("<td>").text("Temperature: " + (Math.round(day3.main.temp)) + String.fromCharCode(176) + " F");
+                    var day4Temp = $("<td>").text("Temperature: " + (Math.round(day4.main.temp)) + String.fromCharCode(176) + " F");
+                    var day5Temp = $("<td>").text("Temperature: " + (Math.round(day5.main.temp)) + String.fromCharCode(176) + " F");
                     row3.append(day1Temp);
                     row3.append(day2Temp);
                     row3.append(day3Temp);
                     row3.append(day4Temp);
                     row3.append(day5Temp);
+
                     var row4 = $("#row4");
-                    var day1WindSpeed = $("<td>").text(`Wind Speed: ${day1.wind.speed} mph`);
-                    var day2WindSpeed = $("<td>").text(`Wind Speed: ${day2.wind.speed} mph`);
-                    var day3WindSpeed = $("<td>").text(`Wind Speed: ${day3.wind.speed} mph`);
-                    var day4WindSpeed = $("<td>").text(`Wind Speed: ${day4.wind.speed} mph`);
-                    var day5WindSpeed = $("<td>").text(`Wind Speed: ${day5.wind.speed} mph`);
+                    var day1WindSpeed = $("<td>").text(`Wind Speed: ${ Math.round(day1.wind.speed) } mph`);
+                    var day2WindSpeed = $("<td>").text(`Wind Speed: ${ Math.round(day2.wind.speed) } mph`);
+                    var day3WindSpeed = $("<td>").text(`Wind Speed: ${ Math.round(day3.wind.speed) } mph`);
+                    var day4WindSpeed = $("<td>").text(`Wind Speed: ${ Math.round(day4.wind.speed) } mph`);
+                    var day5WindSpeed = $("<td>").text(`Wind Speed: ${ Math.round(day5.wind.speed) } mph`);
                     row4.append(day1WindSpeed);
                     row4.append(day2WindSpeed);
                     row4.append(day3WindSpeed);
@@ -451,24 +454,36 @@ $(document).ready(function () {
         console.log(queryURL);
         $.ajax({
             url: queryURL,
-            method: "GET"
-        }).then(function (response) {
-            // Create a table to hold weather data on page.
-            var table = $("#weather");
-            // Adding temperature to page.
-            var currentTemp = $("<tr>").text(`Current Temperature: ${response.main.temp} F`);
-            table.append(currentTemp);
-            // Adding wind speed to page.
-            var windSpeed = $("<tr>").text(`Wind Speed: ${response.wind.speed} mph`);
-            table.append(windSpeed);
-            // Calling function to calculate wind direction.
-            calcWindDir(response.wind.deg);
-            // Adding wind direction to page.
-            var windDir = $("<tr>").text(`Wind Direction: ${windDirection}`);
-            table.append(windDir);
-            // Adding humidity to page.
-            var humid = $("<tr>").text(`Humidity: ${response.main.humidity}%`);
-            table.append(humid);
+            method: "GET",
+            success: function (response) {
+                console.log(response);
+                console.log()
+                // Create a table to hold weather data on page.
+                var table = $("#weather");
+                table.html(`<th>Current Weather</th>`)
+                // Adding temperature to page.
+                var currentTemp = $("<tr>").text("Temperature: " + (Math.round(response.main.temp)) + String
+                    .fromCharCode(176) + " F");
+                table.append(currentTemp);
+                // Adding wind speed to page.
+                var windSpeed = $("<tr>").text(`Wind Speed: ${Math.round(response.wind.speed)} mph`);
+                table.append(
+                    windSpeed);
+                // Calling function to calculate wind direction.
+                calcWindDir(response.wind.deg);
+                // Adding wind direction to page.
+                var windDir = $("<tr>").text(`Wind Direction: ${windDirection}`);
+                table.append(windDir);
+                // Adding humidity to page.
+                var humid = $("<tr>").text(`Humidity: ${response.main.humidity}%`);
+                table.append(humid);
+            },
+            error: function () {
+                M.toast({
+                    html: 'No weather available'
+                });
+                $('#weather').html(`<th>No weather available</th>`);
+            }
         });
     };
 
@@ -504,11 +519,16 @@ $(document).ready(function () {
             row2.append(day5Date);
 
             var row3 = $("#row3");
-            var day1Temp = $("<td>").text(`Temperature: ${day1.main.temp}`)
-            var day2Temp = $("<td>").text(`Temperature: ${day2.main.temp}`);
-            var day3Temp = $("<td>").text(`Temperature: ${day3.main.temp}`);
-            var day4Temp = $("<td>").text(`Temperature: ${day4.main.temp}`);
-            var day5Temp = $("<td>").text(`Temperature: ${day5.main.temp}`);
+            var day1Temp = $("<td>").text("Temperature: " + (Math.round(day1.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day2Temp = $("<td>").text("Temperature: " + (Math.round(day2.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day3Temp = $("<td>").text("Temperature: " + (Math.round(day3.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day4Temp = $("<td>").text("Temperature: " + (Math.round(day4.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day5Temp = $("<td>").text("Temperature: " + (Math.round(day5.main.temp)) + String
+                .fromCharCode(176) + " F");
             row3.append(day1Temp);
             row3.append(day2Temp);
             row3.append(day3Temp);
@@ -516,11 +536,11 @@ $(document).ready(function () {
             row3.append(day5Temp);
 
             var row4 = $("#row4");
-            var day1WindSpeed = $("<td>").text(`Wind Speed: ${day1.wind.speed} mph`);
-            var day2WindSpeed = $("<td>").text(`Wind Speed: ${day2.wind.speed} mph`);
-            var day3WindSpeed = $("<td>").text(`Wind Speed: ${day3.wind.speed} mph`);
-            var day4WindSpeed = $("<td>").text(`Wind Speed: ${day4.wind.speed} mph`);
-            var day5WindSpeed = $("<td>").text(`Wind Speed: ${day5.wind.speed} mph`);
+            var day1WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day1.wind.speed)} mph`);
+            var day2WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day2.wind.speed)} mph`);
+            var day3WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day3.wind.speed)} mph`);
+            var day4WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day4.wind.speed)} mph`);
+            var day5WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day5.wind.speed)} mph`);
             row4.append(day1WindSpeed);
             row4.append(day2WindSpeed);
             row4.append(day3WindSpeed);
@@ -590,6 +610,7 @@ $(document).ready(function () {
     });
     // Search cities and states
     $('#search-cities').on('click', function () {
+        $('#trails-display').hide();
         $('.select-dropdown').val('What kind of place are you looking for?');
         $('#info-display').removeClass('active');
         $('#weather-display').removeClass('active');
@@ -635,7 +656,8 @@ $(document).ready(function () {
         };
     });
     // Search national parks
-    $(document).on('click', '#search-parks', function () {
+    $('#search-parks').on('click', function () {
+        $('#trails-display').show();
         $('#info-display').removeClass('active');
         $('#weather-display').removeClass('active');
         $('.collapsible-body').css('display', 'none');
@@ -663,6 +685,7 @@ $(document).ready(function () {
                 var city = $('#city').val().trim();
                 city = city.replace(/ /g, "%20");
                 var state = $('#state').val().trim();
+                state = state.replace(/ /g, "%20");
                 var search = (`${city},${state}`);
                 var section = currentSection;
                 var queryURLSelected = queryURLBasePlaces + '&near=' + search + '&section=' + section + '&limit=5';
@@ -696,6 +719,7 @@ $(document).ready(function () {
     });
     // Clear everything when back button clicked
     $(document).on('click', '#back-button', function () {
+        $('#trails-display').hide();
         $('#current-result').hide();
         $('#current-result').empty();
         $("html").css("background-image", "url('assets/images/bg.jpg')");
@@ -733,18 +757,22 @@ $(document).ready(function () {
         trailCard.insertAfter(this)
     });
 
-    // Function to capture input, reset form, then call API function.
-    $("#submit").on("click", function (event) {
-        city = $("#city").val().trim();
-        $("#input-form").each(function () {
-            this.reset();
-        });
-        console.log(country, city);
-        currentWeatherCall();
-        forecastCall();
-    });
-
     // Get the input field
+    var input = $('#state').val();
+    var inputParks = $('#parks').val();
+
+    function enterPressedCities(x) {
+        x.on("keyup", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                $('#search-cities').click();
+            }
+        });
+    }
+
     var input = $('#state');
     // Execute a function when the user releases a key on the keyboard
     input.on("keyup", function (event) {

@@ -57,7 +57,7 @@ html {
 #current-result h1 {
     font-size: 5.2rem;
     line-height: 110%;
-    margin: -1.32rem 0 -4.32rem 0;
+    margin: 0;
 }
 
 /* Results card */
@@ -137,12 +137,6 @@ html {
 table {
     border-collapse: unset !important;
 }
-
-#weather tr:hover {
-    transform: scale(1.01);
-    background: lightgreen;
-}
-
 
 #forecast td {
     text-align: center;
