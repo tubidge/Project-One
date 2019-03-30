@@ -8,29 +8,25 @@ html {
     color: #1e1e1e;
 }
 
+/* Slider  */
+.slider h1 {
+    font-family: 'Amatic SC', cursive;
+    font-weight: bold;
+}
+
+.slider .indicators .indicator-item.active {
+    background-color: #1565c0;
+}
+
+
 /* Hidden elements */
 #main-content {
     display: none;
 }
 
-.card {
+/* Search cities or parks cards */
+#results .card {
     display: none;
-}
-
-.carousel .carousel-item {
-    width: 400px;
-}
-
-/* Results card */
-.collapsible-body {
-    opacity: .9;
-    background-color: white;
-}
-
-.collapsible-header {
-    border-radius: 5px;
-    opacity: .9;
-    color: white;
 }
 
 .card-content li {
@@ -47,6 +43,24 @@ html {
     border: 1px solid #1e1e1e;
 }
 
+/* Carousel images */
+.carousel .carousel-item {
+    width: 400px;
+}
+
+/* Display current search result */
+#current-result {
+    font-family: 'Amatic SC', cursive;
+    font-weight: bold;
+}
+
+#current-result h1 {
+    font-size: 5.2rem;
+    line-height: 110%;
+    margin: -1.32rem 0 -4.32rem 0;
+}
+
+/* Results card */
 #results-card {
     display: none;
 }
@@ -55,16 +69,25 @@ html {
     list-style-type: none !important;
 }
 
-.slider .indicators .indicator-item.active {
-    background-color: #1565c0;
+.collapsible-header {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    opacity: .9;
+    color: white;
 }
 
-#display-places {
-    color: #311B92;
+.collapsible-body {
+    opacity: .9;
+    background-color: white;
 }
 
 .collapsible.popout {
     color: #1e1e1e;
+}
+
+/* Places dropdown */
+#display-places {
+    color: #311B92;
 }
 
 .select-wrapper input.select-dropdown:focus {
@@ -81,18 +104,53 @@ html {
     color: #1e1e1e;
 }
 
-#current-result {
-    font-family: 'Amatic SC', cursive;
-    font-weight: bold;
+/* Autocomplete dropdown */
+.section-search input.autocomplete {
+    color: #1e1e1e;
 }
 
-#current-result h1 {
-    font-size: 5.2rem;
-    line-height: 110%;
-    margin: -1.32rem 0 -4.32rem 0;
+.input-field .prefix.active {
+    color: #1e1e1e !important;
 }
 
-.slider h1 {
-    font-family: 'Amatic SC', cursive;
-    font-weight: bold;
+.dropdown-content li>a,
+.dropdown-content li>span {
+    color: #1e1e1e !important;
+}
+
+.dropdown-content li>a:hover {
+    background-color: #1e1e1e !important;
+}
+
+.dropdown-content li>span {
+    color: #1e1e1e !important;
+}
+
+.autocomplete-content li .highlight {
+    color: #1e1e1e !important;
+}
+
+.nav-wrapper li:first-child {
+    list-style-type: none !important;
+}
+
+table {
+    border-collapse: unset !important;
+}
+
+#weather tr:hover {
+    transform: scale(1.01);
+    background: lightgreen;
+}
+
+
+#forecast td {
+    text-align: center;
+    border-right: 2px solid black;
+    border-top: none;
+    border-bottom: none;
+}
+
+#forecast td:last-child {
+    border-right: none;
 }
