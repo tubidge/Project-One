@@ -1,36 +1,156 @@
 /* Background image */
 html {
-    background: url(../images/background.jpg) no-repeat center fixed;
+    background: url(../images/bg.jpg) no-repeat center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+    color: #1e1e1e;
 }
+
+/* Slider  */
+.slider h1 {
+    font-family: 'Amatic SC', cursive;
+    font-weight: bold;
+}
+
+.slider .indicators .indicator-item.active {
+    background-color: #1565c0;
+}
+
 
 /* Hidden elements */
 #main-content {
     display: none;
 }
 
-.card {
+/* Search cities or parks cards */
+#results .card {
     display: none;
+}
+
+.card-content li {
+    list-style-type: initial !important;
+    margin-left: 25px;
+    font-size: 1.1em;
+}
+
+.card-content span {
+    font-size: 1.4em;
+}
+
+.card-content hr {
+    border: 1px solid #1e1e1e;
 }
 
 /* Carousel images */
 .carousel .carousel-item {
-    width: 300px;
+    width: 400px;
+}
+
+/* Display current search result */
+#current-result {
+    font-family: 'Amatic SC', cursive;
+    font-weight: bold;
+}
+
+#current-result h1 {
+    font-size: 5.2rem;
+    line-height: 110%;
+    margin: -1.32rem 0 -4.32rem 0;
 }
 
 /* Results card */
+#results-card {
+    display: none;
+}
+
+#results-card li {
+    list-style-type: none !important;
+}
+
+.collapsible-header {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    opacity: .9;
+    color: white;
+}
+
 .collapsible-body {
     opacity: .9;
     background-color: white;
 }
 
-#results-card {
-    display: none;
+.collapsible.popout {
+    color: #1e1e1e;
 }
 
-li {
-    list-style-type: initial !important;
+/* Places dropdown */
+#display-places {
+    color: #311B92;
+}
+
+.select-wrapper input.select-dropdown:focus {
+    border-bottom: 1px solid #1e1e1e;
+}
+
+.dropdown-content li>a,
+.dropdown-content li>span {
+    color: #1e1e1e;
+}
+
+.select-wrapper input.select-dropdown {
+    border-bottom: 1px solid #1e1e1e;
+    color: #1e1e1e;
+}
+
+/* Autocomplete dropdown */
+.section-search input.autocomplete {
+    color: #1e1e1e;
+}
+
+.input-field .prefix.active {
+    color: #1e1e1e !important;
+}
+
+.dropdown-content li>a,
+.dropdown-content li>span {
+    color: #1e1e1e !important;
+}
+
+.dropdown-content li>a:hover {
+    background-color: #1e1e1e !important;
+}
+
+.dropdown-content li>span {
+    color: #1e1e1e !important;
+}
+
+.autocomplete-content li .highlight {
+    color: #1e1e1e !important;
+}
+
+.nav-wrapper li:first-child {
+    list-style-type: none !important;
+}
+
+table {
+    border-collapse: unset !important;
+}
+
+#weather tr:hover {
+    transform: scale(1.01);
+    background: lightgreen;
+}
+
+
+#forecast td {
+    text-align: center;
+    border-right: 2px solid black;
+    border-top: none;
+    border-bottom: none;
+}
+
+#forecast td:last-child {
+    border-right: none;
 }

@@ -3,71 +3,80 @@ $(document).ready(function () {
     // INITIAL DISPLAY
     // ===============================
     $('.slider').slider({
-        interval: 2800,
-        duration: 700,
-        indicators: false,
+        interval: 2100,
+        duration: 800,
+        // indicators: false,
     });
     $('input.autocomplete').autocomplete({
         data: {
-            "AL": null,
-            "AK": null,
-            "AZ": null,
-            "AR": null,
-            "CA": null,
-            "CO": null,
-            "CT": null,
-            "DE": null,
-            "FL": null,
-            "GA": null,
-            "HI": null,
-            "ID": null,
-            "IL": null,
-            "IN": null,
-            "IA": null,
-            "KS": null,
-            "KY": null,
-            "LA": null,
-            "ME": null,
-            "MD": null,
-            "MA": null,
-            "MI": null,
-            "MN": null,
-            "MS": null,
-            "MO": null,
-            "MT": null,
-            "NE": null,
-            "NV": null,
-            "NH": null,
-            "NJ": null,
-            "NM": null,
-            "NY": null,
-            "NC": null,
-            "ND": null,
-            "OH": null,
-            "OK": null,
-            "OR": null,
-            "PA": null,
-            "RI": null,
-            "SC": null,
-            "SD": null,
-            "TN": null,
-            "TX": null,
-            "UT": null,
-            "VT": null,
-            "VA": null,
-            "WA": null,
-            "WV": null,
-            "WI": null,
-            "WY": null,
-            "DC": null,
-            "PR": null,
+            "alabama": null,
+            "alaska": null,
+            "arizona": null,
+            "arkansas": null,
+            "california": null,
+            "colorado": null,
+            "connecticut": null,
+            "delaware": null,
+            "florida": null,
+            "georgia": null,
+            "hawaii": null,
+            "idaho": null,
+            "illinois": null,
+            "indiana": null,
+            "iowa": null,
+            "kansas": null,
+            "kentucky": null,
+            "louisiana": null,
+            "maine": null,
+            "maryland": null,
+            "massachusetts": null,
+            "michigan": null,
+            "minnesota": null,
+            "mississippi": null,
+            "missouri": null,
+            "montana": null,
+            "nebraska": null,
+            "nevada": null,
+            "new hampshire": null,
+            "new jersey": null,
+            "new mexico": null,
+            "new york": null,
+            "north carolina": null,
+            "north dakota": null,
+            "ohio": null,
+            "oklahoma": null,
+            "oregon": null,
+            "pennsylvania": null,
+            "rhode island": null,
+            "south carolina": null,
+            "south dakota": null,
+            "tennessee": null,
+            "texas": null,
+            "utah": null,
+            "vermont": null,
+            "virginia": null,
+            "washington": null,
+            "west virginia": null,
+            "wisconsin": null,
+            "wyoming": null,
+            "american samoa": null,
+            "district of columbia": null,
+            "federated states of micronesia": null,
+            "guam": null,
+            "marshall islands": null,
+            "northern mariana islands": null,
+            "palau": null,
+            "puerto rico": null,
+            "virgin islands": null,
         },
     });
     // Hide until cities or park search buttons clicked
-    $('.carousel').hide();
     $('#results-card').hide();
     // Hide until cities search button clicked
     $('#display-places').hide();
+    $('#image-card').show();
+    $('#image-card').hide();
+
     // SETUP VARIABLES
     // ===============================
     var city;
@@ -78,18 +87,80 @@ $(document).ready(function () {
     var forecastApiResponse = {};
     var windDirection = "";
     var parkResults = true;
+    var hikingTrails = [];
     const numbers = ['one', 'two', 'three'];
     // Data Validation
     var states = [
-        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC", "PR"
+        "alabama",
+        "alaska",
+        "arizona",
+        "arkansas",
+        "california",
+        "colorado",
+        "connecticut",
+        "delaware",
+        "florida",
+        "georgia",
+        "hawaii",
+        "idaho",
+        "illinois",
+        "indiana",
+        "iowa",
+        "kansas",
+        "kentucky",
+        "louisiana",
+        "maine",
+        "maryland",
+        "massachusetts",
+        "michigan",
+        "minnesota",
+        "mississippi",
+        "missouri",
+        "montana",
+        "nebraska",
+        "nevada",
+        "new hampshire",
+        "new jersey",
+        "new mexico",
+        "new york",
+        "north carolina",
+        "north dakota",
+        "ohio",
+        "oklahoma",
+        "oregon",
+        "pennsylvania",
+        "rhode island",
+        "south carolina",
+        "south dakota",
+        "tennessee",
+        "texas",
+        "utah",
+        "vermont",
+        "virginia",
+        "washington",
+        "west virginia",
+        "wisconsin",
+        "wyoming",
+        "american samoa",
+        "district of columbia",
+        "federated states of micronesia",
+        "guam",
+        "marshall islands",
+        "northern mariana islands",
+        "palau",
+        "puerto rico",
+        "virgin islands",
     ];
+
     // API keys
-    const imageKey = '2b234cc922a51464a58cf79b75660ac3f3e79eea2715849b5b48ea92fcb9901f'; // Unsplash
+    const imageKey = '12030619-aa9394d6920571270adf414a0'; // Pixabay
     const clientID = 'L3RXDSOLTBMHGMY1AUZ20JLONBYUQU5WWAD4JWLIW2JHYDXK'; // Foursquare
     const clientIDSec = 'XKRLZ531CQ0FC334PIBNNDQRER5PGCR0AQCNJRZ4EH1WSMNR'; // Foursquare
     const parksKey = 'ijY3T1c8GJfW6s8gD4MAUVZYbfM7hnEnGNoxpOet'; // National parks
+    const hikesKey = '200439802-40135efa1850c123fbd61e5f8746dc12';
+
     // Base URLs
-    const queryURLBaseImages = `https://api.unsplash.com/search/photos?client_id=${imageKey}&orientation=landscape&per_page=30`; // Unsplash
+    const queryURLBaseImages = `https://pixabay.com/api/?key=${imageKey}&safesearch=true&category=travel&per_page=200`;
     const queryURLBasePlaces = `https://api.foursquare.com/v2/venues/explore?client_id=${clientID}&client_secret=${clientIDSec}&v=20180323`; // Foursquare
     const queryURLBaseParks = `https://developer.nps.gov/api/v1/parks?api_key=${parksKey}`; // National parks
     // FUNCTIONS
@@ -108,6 +179,7 @@ $(document).ready(function () {
             $("#parks").val('');
         };
     };
+
     // Render images
     function runQueryImages(queryURL) {
         $.ajax({
@@ -115,46 +187,50 @@ $(document).ready(function () {
             method: 'GET'
         }).then(function (res) {
             var images = [];
-            console.log(`Images: ${queryURL}`);
-            // Array to add id to each image
-            city = $('#city').val().trim();
-            state = $('#state').val().trim();
-            for (var i = 0; i < res.results.length; i++) {
-                var src = res.results[i].urls.small;
-                var likes = res.results[i].user.total_likes;
-                var tags = res.results[i].tags;
-                var photoTags = res.results[i].photo_tags;
-                if (images.length < numbers.length) {
-                    if (likes > 0) {
-                        for (var j = 0; j < tags.length; j++) {
-                            var tag = tags[j].title;
-                            if (tag === city || tag === "usa" || tag === "resort" || tag === "nature" || tag === "city" || tag === "mountains" || tag === "snow" || tag === "cityscape" || tag === "skyline" || tag === "landscape" || tag === "downtown" || tag === "theme park" || tag === "park") {
-                                if (images.indexOf(src) === -1) {
-                                    images.push(src);
-                                };
-                            };
-                        };
-                        for (var k = 0; k < photoTags.length; k++) {
-                            var photoTag = photoTags[k].title;
-                            if (photoTag === "person" || photoTag === "man" || photoTag === "bird" || photoTag === "woman" || photoTag === "face" || photoTag === "old" || photoTag === "human" || photoTag === "sign" || photoTag === "traffic" || photoTag === "animal") {
-                                var index = images.indexOf(src);
-                                images.splice(index, 1);
-                            };
-                        };
+            var hits = res.hits;
+            var length = res.hits.length;
+            for (var i = 0; i < length; i++) {
+                var image = hits[i];
+                var url = hits[i].largeImageURL;
+                var tags = hits[i].tags;
+                var str = tags;
+                var height = hits[i].webformatHeight;
+                city = $('#city').val().trim();
+                city = city.toLowerCase();
+                state = $('#state').val().trim();
+                state = state.toLowerCase();
+                var n = tags.includes(city);
+                if (n) {
+                    if (height > 300) {
+                        images.push(url);
                     };
                 };
             };
-            if (images.length < numbers.length) {
-                console.log("not enough images");
+            if (images.length > 2) {
+                // Array to add id to each image
+                var numbers = ['one', 'two', 'three'];
+
+                for (var i = 0; i < numbers.length; i++) {
+                    var src = images[i];
+                    var newImage = $(`<img src="${src}" width="400px">`);
+                    $(`#${numbers[i]}`).html(newImage);
+                };
+            } else if (images.length === 1 || images.length === 2) {
+                newImage = $(`<img src="${images[0]}" width="400px">`);
+                $('#image-card').hide();
+                $('#single-image').html(newImage);
+                $('#single-image').show();
+            } else {
+                $('#image-card').hide();
+                M.toast({
+                    html: "No image results"
+                });
             };
-            for (var i = 0; i < numbers.length; i++) {
-                var newImage = $(`<img src="${images[i]}">`);
-                $(`#${numbers[i]}`).html(newImage);
-            };
-            console.log(images);
+            $('#image-card').show();
             $('#results-card').show();
         });
     };
+
     // Render list of places
     function runQueryPlaces(queryURL) {
         $.ajax({
@@ -172,7 +248,7 @@ $(document).ready(function () {
                 var newPlace = $('<p>');
                 var newPlaceLink = $('<a>');
                 newPlaceLink.addClass('place');
-                newPlaceLink.attr('target", "_blank');
+                newPlaceLink.attr('target', '_blank');
                 newPlaceLink.attr('data-name', name);
                 newPlaceLink.attr('data-id', venueID);
                 newPlaceLink.attr('href', `https://www.google.com/search?source=hp&ei=IECZXL2eN43J0PEPk9KM6Ak&q=${name}`);
@@ -216,12 +292,153 @@ $(document).ready(function () {
                         var directions = $('<p>').text(currentResult.directionsinfo)
                         console.log(description);
                         console.log(directions);
-                        $("#weather").empty();
+                        $("#general-weather").empty();
                         $("#park-info").empty();
-                        $("#weather").append(currentResult.weatherinfo);
+                        $("#general-weather").append(currentResult.weatherinfo);
                         $('#park-info').append(description).append(directions);
                     };
                 };
+                // Weather Forecast API call for national Parks
+                var latLong = results[0].latlong.split(", ");
+                var lat = Math.floor(latLong[0].slice(4, -1));
+                var long = Math.floor(latLong[1].slice(5, -1));
+                var queryURL =
+                    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&units=imperial&appid=${key}`;
+                var encodeURL = encodeURI(queryURL);
+                console.log(encodeURL);
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    console.log(response)
+                    $('#weather').empty()
+                    // Create a table to hold weather data on page.
+                    var table = $("#weather");
+                    // Adding temperature to page.
+                    var currentTemp = $("<tr>").text(`Current Temperature: ${response.main.temp} F`);
+                    table.append(currentTemp);
+                    // Adding wind speed to page.
+                    var windSpeed = $("<tr>").text(`Wind Speed: ${response.wind.speed} mph`);
+                    table.append(windSpeed);
+                    // Calling function to calculate wind direction.
+                    calcWindDir(response.wind.deg);
+                    // Adding wind direction to page.
+                    var windDir = $("<tr>").text(`Wind Direction: ${windDirection}`);
+                    table.append(windDir);
+                    // Adding humidity to page.
+                    var humid = $("<tr>").text(`Humidity: ${response.main.humidity}%`);
+                    table.append(humid);
+                });
+                // Forecast Call
+                var forecastURL =
+                    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&units=imperial&appid=${key}`;
+                var encodeURL = encodeURI(forecastURL);
+                console.log(encodeURL)
+                $.ajax({
+                    url: forecastURL,
+                    method: "GET"
+                }).then(function (results) {
+                    $('#row1, #row2, #row3, #row4, #row5, #row6').empty();
+                    forecastApiResponse = results;
+                    console.log(`Forecast Response: ${forecastApiResponse}`);
+                    var day1 = forecastApiResponse.list[5];
+                    var day2 = forecastApiResponse.list[13];
+                    var day3 = forecastApiResponse.list[21];
+                    var day4 = forecastApiResponse.list[29];
+                    var day5 = forecastApiResponse.list[37];
+                    $("#row1").html("<th> 5 Day Forecast </th>");
+                    var row2 = $("#row2");
+                    var day1Date = $("<th>").text(moment.unix(day1.dt).format("MMM Do YYYY"));
+                    var day2Date = $("<th>").text(moment.unix(day2.dt).format("MMM Do YYYY"));
+                    var day4Date = $("<th>").text(moment.unix(day4.dt).format("MMM Do YYYY"));
+                    var day3Date = $("<th>").text(moment.unix(day3.dt).format("MMM Do YYYY"));
+                    var day5Date = $("<th>").text(moment.unix(day5.dt).format("MMM Do YYYY"));
+                    row2.append(day1Date);
+                    row2.append(day2Date);
+                    row2.append(day3Date);
+                    row2.append(day4Date);
+                    row2.append(day5Date);
+                    var row3 = $("#row3");
+                    var day1Temp = $("<td>").text(`Temperature: ${day1.main.temp}`)
+                    var day2Temp = $("<td>").text(`Temperature: ${day2.main.temp}`);
+                    var day3Temp = $("<td>").text(`Temperature: ${day3.main.temp}`);
+                    var day4Temp = $("<td>").text(`Temperature: ${day4.main.temp}`);
+                    var day5Temp = $("<td>").text(`Temperature: ${day5.main.temp}`);
+                    row3.append(day1Temp);
+                    row3.append(day2Temp);
+                    row3.append(day3Temp);
+                    row3.append(day4Temp);
+                    row3.append(day5Temp);
+                    var row4 = $("#row4");
+                    var day1WindSpeed = $("<td>").text(`Wind Speed: ${day1.wind.speed} mph`);
+                    var day2WindSpeed = $("<td>").text(`Wind Speed: ${day2.wind.speed} mph`);
+                    var day3WindSpeed = $("<td>").text(`Wind Speed: ${day3.wind.speed} mph`);
+                    var day4WindSpeed = $("<td>").text(`Wind Speed: ${day4.wind.speed} mph`);
+                    var day5WindSpeed = $("<td>").text(`Wind Speed: ${day5.wind.speed} mph`);
+                    row4.append(day1WindSpeed);
+                    row4.append(day2WindSpeed);
+                    row4.append(day3WindSpeed);
+                    row4.append(day4WindSpeed);
+                    row4.append(day5WindSpeed);
+                    var row5 = $("#row5");
+                    calcWindDir(day1.wind.deg);
+                    var day1WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day2.wind.deg);
+                    var day2WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day3.wind.deg);
+                    var day3WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day4.wind.deg);
+                    var day4WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    calcWindDir(day5.wind.deg);
+                    var day5WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
+                    row5.append(day1WindDir);
+                    row5.append(day2WindDir);
+                    row5.append(day3WindDir);
+                    row5.append(day4WindDir);
+                    row5.append(day5WindDir);
+                    var row6 = $("#row6");
+                    var day1Humidity = $("<td>").text(`Humidity: ${day1.main.humidity}%`);
+                    var day2Humidity = $("<td>").text(`Humidity: ${day2.main.humidity}%`);
+                    var day3Humidity = $("<td>").text(`Humidity: ${day3.main.humidity}%`);
+                    var day4Humidity = $("<td>").text(`Humidity: ${day4.main.humidity}%`);
+                    var day5Humidity = $("<td>").text(`Humidity: ${day5.main.humidity}%`);
+                    row6.append(day1Humidity);
+                    row6.append(day2Humidity);
+                    row6.append(day3Humidity);
+                    row6.append(day4Humidity);
+                    row6.append(day5Humidity);
+                });
+                // Hiking Trails Call
+                var hikingURL = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${long}&maxDistance=100&key=${hikesKey}`;
+                $.ajax({
+                    url: hikingURL,
+                    method: "GET"
+                }).then(function (hike) {
+                    console.log(hike);
+                    var results = hike.trails;
+                    hikingTrails = [];
+                    for (i = 0; i < results.length; i++) {
+                        var btn = $('<a>').addClass('waves-effect waves-light btn hike').text(results[i].name).css('display', 'block');
+                        btn.attr('data-number', i)
+                        $('#trails').append(btn)
+                        var trail = results[i].name;
+                        var trailPic = results[i].imgMedium;
+                        var trailRating = results[i].stars;
+                        var difficulty = results[i].difficulty;
+                        var status = results[i].conditionStatus;
+                        var description = results[i].summary;
+                        var trailObject = {
+                            trail: trail,
+                            trailPic: trailPic,
+                            trailRating: trailRating,
+                            difficulty: difficulty,
+                            status: status,
+                            description: description
+                        }
+                        hikingTrails.push(trailObject);
+                    }
+                    console.log(hikingTrails)
+                })
             };
         });
     };
@@ -231,8 +448,7 @@ $(document).ready(function () {
     function currentWeatherCall() {
         var queryURL =
             `https://api.openweathermap.org/data/2.5/weather?q=${city},usa&units=imperial&appid=${key}`;
-        var encodeURL = encodeURI(queryURL);
-        console.log(encodeURL);
+        console.log(queryURL);
         $.ajax({
             url: queryURL,
             method: "GET"
@@ -260,8 +476,7 @@ $(document).ready(function () {
     function forecastCall() {
         var queryURL =
             `https://api.openweathermap.org/data/2.5/forecast?q=${city},usa&units=imperial&appid=${key}`;
-        var encodeURL = encodeURI(queryURL);
-        console.log(encodeURL)
+        console.log(queryURL)
         $.ajax({
             url: queryURL,
             method: "GET"
@@ -370,12 +585,20 @@ $(document).ready(function () {
     // Display city and park search options and hide slider
     $('.start-btn').on('click', function () {
         $('.card').css('display', 'block');
-        $('.slider').empty();
+        $('.slider').remove();
         $('#main-content').css('display', 'block');
     });
     // Search cities and states
     $('#search-cities').on('click', function () {
+        $('.select-dropdown').val('What kind of place are you looking for?');
+        $('#info-display').removeClass('active');
+        $('#weather-display').removeClass('active');
+        $('.collapsible-body').css('display', 'none');
+        $('#sections').prop('selectedIndex', 0);
+        $('.collapsible-body').attr("style");
         // Empty information from previous searches
+        $('#single-image').hide();
+        $('#image-card').hide();
         $('#weather').empty();
         $('#row1, #row2, #row3, #row4, #row5, #row6').empty();
         $('#park-info').empty();
@@ -385,17 +608,27 @@ $(document).ready(function () {
         // Search parameters        
         city = $('#city').val().trim();
         city = city.replace(/ /g, "%20");
+        city = city.toLowerCase();
         state = $('#state').val().trim();
-        state = state.toUpperCase();
+        state = state.toLowerCase();
         if (states.indexOf(state) === -1) {
             M.toast({
                 html: "That's not a valid state"
             })
+            $('#state').val('');
         } else {
+            var cityDisplay = $('#city').val().trim();
+            cityDisplay = cityDisplay.toUpperCase();
+            var stateDisplay = $('#state').val().trim();
+            stateDisplay = stateDisplay.toUpperCase();
+            var searchResult = (`${cityDisplay}, ${stateDisplay}`);
+            var currentResult = $(`<h1 class="center-align white-text">${searchResult}</h1>`);
+            $('#current-result').show();
+            $('#current-result').html(currentResult);
             // Display images
-            $('.carousel').show();
             search = `${city}%20${state}`;
-            queryURL = `${queryURLBaseImages}&query=${search}&page=1&per_page=30`;
+            // queryURL = `${queryURLBaseImages}&query=${search}`;
+            queryURL = `${queryURLBaseImages}&q=${search}`;
             runQueryImages(queryURL);
             currentWeatherCall();
             forecastCall();
@@ -403,11 +636,17 @@ $(document).ready(function () {
     });
     // Search national parks
     $(document).on('click', '#search-parks', function () {
+        $('#info-display').removeClass('active');
+        $('#weather-display').removeClass('active');
+        $('.collapsible-body').css('display', 'none');
+        $('.collapsible-body').attr("style");
+        $('#single-image').hide();
+        $('#image-card').hide();
         $('.helper-text').attr('data-success', 'Searching...');
         $("#display-places").css("display", "none");
         park = $("#parks").val().trim().toLowerCase();
         var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
-        var parkImageURL = `${queryURLBaseImages}&query=${park}`;
+        var parkImageURL = `${queryURLBaseImages}&q=${park}`;
         runQueryParks(parkInfoURL, parkImageURL);
     });
     // Get selected section
@@ -432,6 +671,11 @@ $(document).ready(function () {
         };
     });
     $('#cities-start').click(function () {
+        $("html").css("background-image", "url('assets/images/bg-cities.jpg')");
+        $('.collapsible-header').css('background-color', '#311B92');
+        $('.collapsible-header').css('border-color', '#150851');
+        $('.favButton').css('background-color', '#311B92');
+
         $('#start-buttons').addClass('hide');
         $('#city-search').removeClass('hide');
         $('#backCurrent').removeClass('orange accent-4')
@@ -439,6 +683,11 @@ $(document).ready(function () {
         $('#back-button').removeClass('hide')
     });
     $('#parks-start').click(function () {
+        $("html").css("background-image", "url('assets/images/bg-parks.jpg')");
+        $('.collapsible-header').css('background-color', '#FF6D00');
+        $('.collapsible-header').css('border-color', '#d85c04');
+        $('.favButton').css('background-color', '#FF6D00');
+
         $('#start-buttons').addClass('hide');
         $('#parks-search').removeClass('hide');
         $('#backCurrent').removeClass('deep-purple darken-4')
@@ -447,16 +696,41 @@ $(document).ready(function () {
     });
     // Clear everything when back button clicked
     $(document).on('click', '#back-button', function () {
+        $('#current-result').hide();
+        $('#current-result').empty();
+        $("html").css("background-image", "url('assets/images/bg.jpg')");
         $('#start-buttons').removeClass('hide');
         $('#parks-search').addClass('hide');
         $('#city-search').addClass('hide');
         $('#back-button').addClass('hide');
-        $('.carousel').hide();
+        $('#one, #two, #three').empty();
         $('#results-card').hide();
         $('#park-info').empty();
         $('#weather').empty();
         $('#city').val('');
         $('#state').val('');
+    });
+
+    $(document).on('click', '.hike', function () {
+        $('.trail-card').remove();
+        var event = $(this).attr('data-number');
+        console.log(hikingTrails[event]);
+        var trail = hikingTrails[event];
+        var trailCard = $('<div>').addClass('card trail-card');
+        var trailImage = $('<div>').addClass('card-image');
+        var trailPic = $('<img>');
+        trailPic.attr('src', trail.trailPic)
+        var title = $('<span>').addClass('card-title').text(trail.trail);
+        trailImage.append(trailPic).append(title);
+        trailCard.append(trailImage)
+        var list = $('<ul>').css('margin-left', '2rem')
+        var trailRating = $('<li>').text(`Average Rating: ${trail.trailRating}`)
+        var difficulty = $('<li>').text(`Trail Difficulty: ${trail.difficulty}`)
+        var status = $('<li>').text(`Trail Status: ${trail.status}`)
+        list.append(trailRating).append(difficulty).append(status);
+        var description = $('<p>').text(trail.description);
+        trailCard.append(list).append(description)
+        trailCard.insertAfter(this)
     });
 
     // Function to capture input, reset form, then call API function.
@@ -468,5 +742,18 @@ $(document).ready(function () {
         console.log(country, city);
         currentWeatherCall();
         forecastCall();
+    });
+
+    // Get the input field
+    var input = $('#state');
+    // Execute a function when the user releases a key on the keyboard
+    input.on("keyup", function (event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            $('#search-cities').click();
+        }
     });
 });
