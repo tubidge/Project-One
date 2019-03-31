@@ -11,8 +11,77 @@ firebase.initializeApp(config);
 
 var database = firebase.database()
 
+var auth = firebase.auth();
+
+// LOG IN ON CLICK
+$("#login-btn").on("click", function (e) {
+    e.preventDefault();
+    console.log("logged in");
+
+    // user info from inputs
+    const email = $("#email").val().trim();
+    const password = $("#pass").val().trim();
+
+    // user login
+    auth.signInWithEmailAndPassword(email, password).then(function (credentials) {
+        console.log(credentials)
+
+    }).catch(function (error) {
+        console.log(error)
+    });
+
+    $("#email, #pass").val("");
+
+});
+
+// CREATE ACCOUNT ON CLICK
+$("#reg-btn").on("click", function (e) {
+    e.preventDefault();
+    console.log("registered");
+
+    // user info from inputs
+    const username = $("#regname").val().trim();
+    const email = $("#regemail").val().trim();
+    const password = $("#regpass").val().trim();
+
+    // user registration
+    auth.createUserWithEmailAndPassword(email, password).then(function (credentials) {
+        console.log(credentials)
+        database.ref('users/' + credentials.user.uid).set({
+            username: username
+
+        });
+    });
+
+    $("#regname, regemail, #regpass").val("");
+});
+
+$("#logout").on("click", function (e) {
+    e.stopPropagation();
+
+    auth.signOut().then(function () {
+        console.log("logged out");
+    }).catch(function (error) {
+        console.log(error);
+    });
+});
+
+auth.onAuthStateChanged(function (user) {
+    // console.log(user);
+    if (user) {
+        $(".logged-in").show();
+        $(".logged-out").hide();
+    } else {
+        console.log("not logged in")
+        $(".logged-in").hide();
+        $(".logged-out").show();
+    }
+});
+
 $(document).ready(function () {
     M.AutoInit();
+
+
     // INITIAL DISPLAY
     // ===============================
     $('.slider').slider({
@@ -318,8 +387,11 @@ $(document).ready(function () {
                         var directions = $('<p>').text(currentResult.directionsinfo)
                         console.log(description);
                         console.log(directions);
+                        $('#current-result').empty()
                         $("#general-weather").empty();
                         $("#park-info").empty();
+                        var resultHeader = $(`<h1 class='center-align white-text'>${currentTitle}</h1>`)
+                        $('#current-result').html(resultHeader)
                         $("#general-weather").append(currentResult.weatherinfo);
                         $('#park-info').append(description).append(directions);
                     };
@@ -782,6 +854,8 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.favButton', function () {
+
+
         database.ref('/Image').push({
             title: currentTitle,
             img: favImage[0]
@@ -818,6 +892,8 @@ $(document).ready(function () {
         })
         $('#favorite-list').append(favCard)
     })
+
+
 
     // Get the input field
     var input = $('#state');

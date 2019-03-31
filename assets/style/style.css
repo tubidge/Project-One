@@ -138,10 +138,7 @@ table {
     border-collapse: unset !important;
 }
 
-#weather tr:hover {
-    transform: scale(1.01);
-    background: lightgreen;
-}
+
 
 
 #forecast td {
