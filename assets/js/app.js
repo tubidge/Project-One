@@ -11,7 +11,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-$(document).ready(function() {
+$(document).ready(function () {
   M.AutoInit();
   // INITIAL DISPLAY
   // ===============================
@@ -87,7 +87,6 @@ $(document).ready(function() {
   $("#results-card").hide();
   // Hide until cities search button clicked
   $("#display-places").hide();
-  $("#image-card").show();
   $("#image-card").hide();
 
   // SETUP VARIABLES
@@ -200,7 +199,8 @@ $(document).ready(function() {
     $.ajax({
       url: queryURL,
       method: "GET"
-    }).then(function(res) {
+    }).then(function (res) {
+      console.log(queryURL);
       var images = [];
       var hits = res.hits;
       var length = res.hits.length;
@@ -259,7 +259,7 @@ $(document).ready(function() {
     $.ajax({
       url: queryURL,
       method: "GET"
-    }).then(function(res) {
+    }).then(function (res) {
       console.log(`Places: ${queryURL}`);
       console.log(res);
       $("#display-places").show();
@@ -290,7 +290,7 @@ $(document).ready(function() {
     $.ajax({
       url: queryURL,
       method: "GET"
-    }).then(function(res) {
+    }).then(function (res) {
       console.log(res);
       parkResults = true;
       console.log(parkResults);
@@ -347,7 +347,7 @@ $(document).ready(function() {
         $.ajax({
           url: queryURL,
           method: "GET"
-        }).then(function(response) {
+        }).then(function (response) {
           console.log(response);
           $("#weather").empty();
           // Create a table to hold weather data on page.
@@ -356,9 +356,9 @@ $(document).ready(function() {
           // Adding temperature to page.
           var currentTemp = $("<tr>").text(
             "Temperature: " +
-              Math.round(response.main.temp) +
-              String.fromCharCode(176) +
-              " F"
+            Math.round(response.main.temp) +
+            String.fromCharCode(176) +
+            " F"
           );
           table.append(currentTemp);
           // Adding wind speed to page.
@@ -382,7 +382,7 @@ $(document).ready(function() {
         $.ajax({
           url: forecastURL,
           method: "GET"
-        }).then(function(results) {
+        }).then(function (results) {
           $("#row1, #row2, #row3, #row4, #row5, #row6").empty();
           forecastApiResponse = results;
           console.log(`Forecast Response: ${forecastApiResponse}`);
@@ -416,33 +416,33 @@ $(document).ready(function() {
           var row3 = $("#row3");
           var day1Temp = $("<td>").text(
             "Temperature: " +
-              Math.round(day1.main.temp) +
-              String.fromCharCode(176) +
-              " F"
+            Math.round(day1.main.temp) +
+            String.fromCharCode(176) +
+            " F"
           );
           var day2Temp = $("<td>").text(
             "Temperature: " +
-              Math.round(day2.main.temp) +
-              String.fromCharCode(176) +
-              " F"
+            Math.round(day2.main.temp) +
+            String.fromCharCode(176) +
+            " F"
           );
           var day3Temp = $("<td>").text(
             "Temperature: " +
-              Math.round(day3.main.temp) +
-              String.fromCharCode(176) +
-              " F"
+            Math.round(day3.main.temp) +
+            String.fromCharCode(176) +
+            " F"
           );
           var day4Temp = $("<td>").text(
             "Temperature: " +
-              Math.round(day4.main.temp) +
-              String.fromCharCode(176) +
-              " F"
+            Math.round(day4.main.temp) +
+            String.fromCharCode(176) +
+            " F"
           );
           var day5Temp = $("<td>").text(
             "Temperature: " +
-              Math.round(day5.main.temp) +
-              String.fromCharCode(176) +
-              " F"
+            Math.round(day5.main.temp) +
+            String.fromCharCode(176) +
+            " F"
           );
           row3.append(day1Temp);
           row3.append(day2Temp);
@@ -504,7 +504,7 @@ $(document).ready(function() {
         $.ajax({
           url: hikingURL,
           method: "GET"
-        }).then(function(hike) {
+        }).then(function (hike) {
           console.log(hike);
           var results = hike.trails;
           hikingTrails = [];
@@ -545,7 +545,7 @@ $(document).ready(function() {
     $.ajax({
       url: queryURL,
       method: "GET",
-      success: function(response) {
+      success: function (response) {
         console.log(response);
         console.log();
         // Create a table to hold weather data on page.
@@ -554,9 +554,9 @@ $(document).ready(function() {
         // Adding temperature to page.
         var currentTemp = $("<tr>").text(
           "Temperature: " +
-            Math.round(response.main.temp) +
-            String.fromCharCode(176) +
-            " F"
+          Math.round(response.main.temp) +
+          String.fromCharCode(176) +
+          " F"
         );
         table.append(currentTemp);
         // Adding wind speed to page.
@@ -573,7 +573,7 @@ $(document).ready(function() {
         var humid = $("<tr>").text(`Humidity: ${response.main.humidity}%`);
         table.append(humid);
       },
-      error: function() {
+      error: function () {
         M.toast({
           html: "No weather available"
         });
@@ -589,7 +589,7 @@ $(document).ready(function() {
     $.ajax({
       url: queryURL,
       method: "GET"
-    }).then(function(response) {
+    }).then(function (response) {
       forecastApiResponse = response;
       console.log(`Forecast Response: ${forecastApiResponse}`);
       var day1 = forecastApiResponse.list[5];
@@ -615,33 +615,33 @@ $(document).ready(function() {
       var row3 = $("#row3");
       var day1Temp = $("<td>").text(
         "Temperature: " +
-          Math.round(day1.main.temp) +
-          String.fromCharCode(176) +
-          " F"
+        Math.round(day1.main.temp) +
+        String.fromCharCode(176) +
+        " F"
       );
       var day2Temp = $("<td>").text(
         "Temperature: " +
-          Math.round(day2.main.temp) +
-          String.fromCharCode(176) +
-          " F"
+        Math.round(day2.main.temp) +
+        String.fromCharCode(176) +
+        " F"
       );
       var day3Temp = $("<td>").text(
         "Temperature: " +
-          Math.round(day3.main.temp) +
-          String.fromCharCode(176) +
-          " F"
+        Math.round(day3.main.temp) +
+        String.fromCharCode(176) +
+        " F"
       );
       var day4Temp = $("<td>").text(
         "Temperature: " +
-          Math.round(day4.main.temp) +
-          String.fromCharCode(176) +
-          " F"
+        Math.round(day4.main.temp) +
+        String.fromCharCode(176) +
+        " F"
       );
       var day5Temp = $("<td>").text(
         "Temperature: " +
-          Math.round(day5.main.temp) +
-          String.fromCharCode(176) +
-          " F"
+        Math.round(day5.main.temp) +
+        String.fromCharCode(176) +
+        " F"
       );
       row3.append(day1Temp);
       row3.append(day2Temp);
@@ -727,13 +727,13 @@ $(document).ready(function() {
   // MAIN PROCESS
   // ===============================
   // Display city and park search options and hide slider
-  $(".start-btn").on("click", function() {
+  $(".start-btn").on("click", function () {
     $(".card").css("display", "block");
     $(".slider").remove();
     $("#main-content").css("display", "block");
   });
   // Search cities and states
-  $("#search-cities").on("click", function() {
+  $("#search-cities").on("click", function () {
     $("#trails-display").hide();
     $(".select-dropdown").val("What kind of place are you looking for?");
     $("#info-display").removeClass("active");
@@ -792,7 +792,7 @@ $(document).ready(function() {
     }
   });
   // Search national parks
-  $("#search-parks").on("click", function() {
+  $("#search-parks").on("click", function () {
     $("#trails-display").show();
     $("#info-display").removeClass("active");
     $("#weather-display").removeClass("active");
@@ -808,11 +808,11 @@ $(document).ready(function() {
       .trim()
       .toLowerCase();
     var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
-    var parkImageURL = `${queryURLBaseImages}&q=${park}`;
+    var parkImageURL = `${queryURLBaseImages}&q=${park}%20park`;
     runQueryParks(parkInfoURL, parkImageURL);
   });
   // Get selected section
-  $(document).on("change", "#sections", function() {
+  $(document).on("change", "#sections", function () {
     var sel = $("#sections");
     var opt = sel[0].options;
     var length = opt.length;
@@ -843,7 +843,7 @@ $(document).ready(function() {
       }
     }
   });
-  $("#cities-start").click(function() {
+  $("#cities-start").click(function () {
     $("html").css("background-image", "url('assets/images/bg-cities.jpg')");
     $(".collapsible-header").css("background-color", "#311B92");
     $(".collapsible-header").css("border-color", "#150851");
@@ -855,7 +855,7 @@ $(document).ready(function() {
     $("#backCurrent").addClass("deep-purple darken-4");
     $("#back-button").removeClass("hide");
   });
-  $("#parks-start").click(function() {
+  $("#parks-start").click(function () {
     $("html").css("background-image", "url('assets/images/bg-parks.jpg')");
     $(".collapsible-header").css("background-color", "#FF6D00");
     $(".collapsible-header").css("border-color", "#d85c04");
@@ -868,7 +868,7 @@ $(document).ready(function() {
     $("#back-button").removeClass("hide");
   });
   // Clear everything when back button clicked
-  $(document).on("click", "#back-button", function() {
+  $(document).on("click", "#back-button", function () {
     $("#trails-display").hide();
     $("#current-result").hide();
     $("#current-result").empty();
@@ -877,15 +877,17 @@ $(document).ready(function() {
     $("#parks-search").addClass("hide");
     $("#city-search").addClass("hide");
     $("#back-button").addClass("hide");
+    $('#image-card').hide();
     $("#one, #two, #three").empty();
     $("#results-card").hide();
     $("#park-info").empty();
+    $("#parks").val('');
     $("#weather").empty();
     $("#city").val("");
     $("#state").val("");
   });
 
-  $(document).on("click", ".hike", function() {
+  $(document).on("click", ".hike", function () {
     $(".trail-card").remove();
     var event = $(this).attr("data-number");
     console.log(hikingTrails[event]);
@@ -912,30 +914,14 @@ $(document).ready(function() {
     trailCard.insertAfter(this);
   });
 
-  // Get the input field
-  var input = $("#state").val();
-  var inputParks = $("#parks").val();
-
-  function enterPressedCities(x) {
-    x.on("keyup", function(event) {
-      // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13) {
-        // Cancel the default action, if needed
-        event.preventDefault();
-        // Trigger the button element with a click
-        $("#search-cities").click();
-      }
-    });
-  }
-
-  $(document).on("click", ".favButton", function() {
+  $(document).on("click", ".favButton", function () {
     database.ref("/Image").push({
       title: currentTitle,
       img: favImage[0]
     });
   });
 
-  database.ref("/Image").on("child_added", function(snap) {
+  database.ref("/Image").on("child_added", function (snap) {
     var favCard = $("<div>").addClass("card trail-card");
     var favImage = $("<div>").addClass("card-image");
     var favPic = $("<img>");
@@ -969,17 +955,11 @@ $(document).ready(function() {
     $("#favorite-list").append(favCard);
   });
 
-  // Get the input field
-
-  var input = $("#state");
-  // Execute a function when the user releases a key on the keyboard
-  input.on("keyup", function(event) {
-    // Number 13 is the "Enter" key on the keyboard
+  // Enable enter to click buttons
+  $("#state").keyup(function (event) {
     if (event.keyCode === 13) {
-      // Cancel the default action, if needed
       event.preventDefault();
-      // Trigger the button element with a click
       $("#search-cities").click();
-    }
+    };
   });
 });

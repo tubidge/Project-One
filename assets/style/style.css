@@ -163,3 +163,7 @@ table {
     font-size: 2.5rem !important;
     margin-top: 1rem;
 }
+
+#favButton-container {
+    opacity: 0;
+}
