@@ -19,15 +19,7 @@ html {
 }
 
 
-/* Hidden elements */
-#main-content {
-    display: none;
-}
 
-/* Search cities or parks cards */
-#results .card {
-    display: none;
-}
 
 .card-content li {
     list-style-type: initial !important;
@@ -162,4 +154,34 @@ table {
 #favorite-list span {
     font-size: 2.5rem !important;
     margin-top: 1rem;
+}
+
+#fav-page {
+    float: right;
+    margin-top: 1rem;
+    margin-right: 1rem;
+
+}
+
+#fav-page:hover {
+    transform: scale(1.1);
+}
+
+#home-page {
+    float: right;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+
+#home-page:hover {
+    transform: scale(1.1);
+}
+
+#back-button {
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+#back-button:hover {
+    transform: scale(1.1);
 }
