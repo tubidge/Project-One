@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <script src="https://rawgit.com/moment/moment/2.2.1/min/moment.min.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+
   <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
@@ -70,12 +72,14 @@
   <div id="main-content">
     <!-- Navbar  -->
     <nav>
+
       <div class="nav-wrapper black">
 
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li>
             <a href="favorites.html">
               <i class="material-icons" style="font-size: 30px; margin-right: 1rem;">star</i></a>
+
           </li>
         </ul>
       </div>
@@ -150,15 +154,18 @@
         <div class="input-field col s3">
           <input id="city" type="text" class="grey-text text-lighten-1" />
           <label class="active" for="city">City</label>
-          <span class="helper-text" data-error="No Results Found" data-success=" ">Helper text</span>
+          <span class="helper-text" data-error="No Results Found" data-success="Searching..."></span>
+
         </div>
-        <div class="input-field col s3">
+        <div class=" input-field col s3">
+
           <input id="state" type="text" class="autocomplete grey-text text-lighten-1" />
           <label class="active" for="state">State</label>
         </div>
         <div class="col s3">
           <a class="btn-floating btn-large waves-effect waves-light deep-purple darken-4" id="search-cities"
             style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
+
         </div>
       </div>
     </form>
@@ -170,15 +177,18 @@
         <div class="input-field col s3">
           <input id="parks" type="text" class="grey-text text-lighten-1 validate" />
           <label class="active" for="parks">Park Name</label>
-          <span class="helper-text" data-error="wrong" data-success="Searching...">Helper text</span>
+          <span class="helper-text" data-error="wrong" data-success="Searching..."></span>
+
         </div>
         <div class="col s3">
           <a class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
             style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
+
         </div>
       </div>
     </form>
   </div>
+
   <div id="current-result"></div>
   <!-- Carousel with API images -->
   <div class="row">
@@ -244,7 +254,9 @@
             </div>
           </div>
         </li>
-        <li>
+
+        <li id="trails-display">
+
           <div class="collapsible-header z-depth-3">
             <i class="material-icons">place</i>Trails
           </div>
