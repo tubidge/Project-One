@@ -185,3 +185,18 @@ table {
 #back-button:hover {
     transform: scale(1.1);
 }
+
+.favButton {
+    margin-bottom: 1rem;
+    z-index: 0;
+}
+
+.venue-image {
+    margin-bottom: 5px;
+}
+
+.venue-image:hover {
+    transform: scale(1.1);
+    background-color: #1d0d66 !important;
+    font-weight: bold;
+}

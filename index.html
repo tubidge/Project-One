@@ -73,7 +73,7 @@
                   class="material-icons">search</i></a>
             </div>
             <div class="card-content blue-grey lighten-5">
-              <span>Find data on hundreds of U.S. National Parks</span>
+              <span>Find data on hundreds of U.S. national parks</span>
               <hr />
               <ul>
                 <li>Weather</li>
@@ -105,8 +105,9 @@
           <label class="active" for="state">State</label>
         </div>
         <div class="col s3">
-          <a class="btn-floating btn-large waves-effect waves-light deep-purple darken-4" id="search-cities"
-            style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
+          <button class="btn-floating btn-large waves-effect waves-light deep-purple darken-4" id="search-cities"
+            style="margin-top: .5rem;"><i class="material-icons"
+              style="font-size: 35px;">keyboard_arrow_down</i></button>
 
         </div>
       </div>
@@ -123,8 +124,9 @@
 
         </div>
         <div class="col s3">
-          <a class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
-            style="margin-top: .5rem;"><i class="material-icons" style="font-size: 35px;">keyboard_arrow_down</i></a>
+          <button class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
+            style="margin-top: .5rem;"><i class="material-icons"
+              style="font-size: 35px;">keyboard_arrow_down</i></button>
 
         </div>
       </div>
@@ -146,13 +148,13 @@
   <!-- Results card -->
   <div class="row">
     <div class="col s6 offset-m3">
-      <ul class="collapsible popout z-depth-5" id="results-card">
-        <li>
+      <ul class="collapsible popout " id="results-card">
+        <li id="button" class="center-align">
           <a class="waves-effect btn-large favButton"><i class="material-icons right">star</i>Favorite</a>
         </li>
         <!-- Info -->
         <li id="info-display">
-          <div class="collapsible-header z-depth-3">
+          <div class="collapsible-header ">
             <i class="material-icons">info_outline</i><strong>Information</strong>
           </div>
           <div class="collapsible-body">
@@ -178,15 +180,17 @@
         <!-- End of info -->
         <!-- Weather -->
         <li id="weather-display">
-          <div class="collapsible-header z-depth-3">
+          <div class="collapsible-header">
             <i class="material-icons">filter_drama</i><strong>Weather</strong>
           </div>
           <div class="collapsible-body">
-            <table id="weather"></table>
-            <br />
+            <table id="weather">
+              <h6 id="current-weather"></h6>
+            </table>
+            <br>
             <div>
               <table id="forecast">
-                <tr id="row1"></tr>
+                <h6 id="forecast-head"></h6>
                 <tr id="row2"></tr>
                 <tr id="row3"></tr>
                 <tr id="row4"></tr>
@@ -199,7 +203,7 @@
 
         <li id="trails-display">
 
-          <div class="collapsible-header z-depth-3">
+          <div class="collapsible-header">
             <i class="material-icons">place</i>Trails
           </div>
           <div class="collapsible-body" id="trails"></div>
