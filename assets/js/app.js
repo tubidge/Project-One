@@ -13,6 +13,7 @@ var database = firebase.database()
 
 $(document).ready(function () {
     M.AutoInit();
+    M.updateTextFields();
     // INITIAL DISPLAY
     // ===============================
     $('.slider').slider({
@@ -187,7 +188,7 @@ $(document).ready(function () {
         if (parkResults) {
             $('.helper-text').attr('data-success', '');
             $('#image-card').show();
-            $("#parks").val('');
+
         } else {
             $('#parks').addClass('invalid')
             $('.helper-text').attr('data-error', 'No Results Found')
@@ -620,6 +621,7 @@ $(document).ready(function () {
     });
     // Search cities and states
     $('#search-cities').on('click', function () {
+        console.log('here')
         $('.select-dropdown').val('What kind of place are you looking for?');
         $('#info-display').removeClass('active');
         $('#weather-display').removeClass('active');
@@ -635,8 +637,10 @@ $(document).ready(function () {
         $('#places').empty();
         // Display list of places
         $('#display-places').show();
-        // Search parameters        
+        // Search parameters      
+        // $('#city').val(getUrlParameter('city'))
         city = $('#city').val().trim();
+        console.log(city)
         city = city.replace(/ /g, "%20");
         city = city.toLowerCase();
         state = $('#state').val().trim();
@@ -708,6 +712,8 @@ $(document).ready(function () {
         };
     });
     $('#cities-start').click(function () {
+        $('#city').val(getUrlParameter('city'))
+        $('#state').val(getUrlParameter('state'))
         $("html").css("background-image", "url('assets/images/bg-cities.jpg')");
         $('.collapsible-header').css('background-color', '#311B92');
         $('.collapsible-header').css('border-color', '#150851');
@@ -719,6 +725,8 @@ $(document).ready(function () {
         $('#backCurrent').addClass('deep-purple darken-4')
         $('#back-button').removeClass('hide')
     });
+
+
     $('#parks-start').click(function () {
         $("html").css("background-image", "url('assets/images/bg-parks.jpg')");
         $('.collapsible-header').css('background-color', '#FF6D00');
@@ -782,17 +790,61 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.favButton', function () {
-        database.ref('/Image').push({
-            title: currentTitle,
-            img: favImage[0]
+        //search database
+        //loop through search results
+        //if search results don't exist, push to database.
+        //if else, error message
+        var pushToFavs = true;
 
-        })
+        database.ref('/Favorites').on("value", function (snap) {
+            var results = snap.val();
+            console.log(results)
+            for (const key in results) {
+                if (results.hasOwnProperty(key)) {
+                    const element = results[key];
+                    console.log(key);
+                    if (element.img === favImage[0] || element.title === currentTitle) {
+                        pushToFavs = false;
+                        console.log("dont push to favorites")
+                    }
 
+                }
+            }
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });
+        if (pushToFavs) {
+            let type;
+            if (currentTitle.indexOf(",") > -1) {
+                type = "city"
+            } else {
+                type = "park"
+            }
+            database.ref('/Favorites').push({
+                title: currentTitle,
+                img: favImage[0],
+                type: type
+            });
+        }
 
 
     })
 
-    database.ref('/Image').on('child_added', function (snap) {
+    database.ref('/Favorites').on('child_added', function (snap) {
+        var city;
+        let state;
+        let park;
+        let type = snap.val().type;
+        let goTo;
+        if (type === 'city') {
+            city = snap.val().title.split(',')[0];
+            state = snap.val().title.split(',')[1];
+            goTo = `index.html?city=${city}&state=${state}`;
+        } else {
+            park = snap.val().title;
+            goTo = `index.html?parkName=${park}`;
+        }
+
         var favCard = $('<div>').addClass('card trail-card');
         var favImage = $('<div>').addClass('card-image');
         var favPic = $('<img>');
@@ -800,7 +852,7 @@ $(document).ready(function () {
         favPic.css('height', '25rem')
         var title = $('<span>').addClass('card-title').text(snap.val().title);
         var search = $('<i>').addClass('material-icons black-text').text('search')
-        var btn = $('<a>').addClass('btn-floating halfway-fab waves-effect waves-light fav-search').css({
+        var btn = $('<a>').attr('href', goTo).addClass('btn-floating halfway-fab waves-effect waves-light fav-search').css({
             'margin-bottom': '3.5rem',
             'text-align': 'center',
             'background-color': 'white',
@@ -814,11 +866,134 @@ $(document).ready(function () {
             "width": "25rem",
             "display": "inline-block",
             'margin': '1rem'
-
         })
         $('#favorite-list').append(favCard)
     })
 
+    $('#favorite-search').click(function () {
+        $('#city').val(getUrlParameter('city'))
+        $('#state').val(getUrlParameter('state'))
+        $("html").css("background-image", "url('assets/images/bg-cities.jpg')");
+        $('.collapsible-header').css('background-color', '#311B92');
+        $('.collapsible-header').css('border-color', '#150851');
+        $('.favButton').css('background-color', '#311B92');
+        console.log('here')
+        $('#start-buttons').addClass('hide');
+        $('#city-search').removeClass('hide');
+        $('#backCurrent').removeClass('orange accent-4')
+        $('#backCurrent').addClass('deep-purple darken-4')
+        $('#back-button').removeClass('hide')
+    });
+
+    //Gets a parameter from the url
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    };
+    console.log(getUrlParameter('city'))
+    console.log(getUrlParameter('state'))
+    if (window.location.href.indexOf('city=') > -1) {
+        $('#city').val(getUrlParameter('city'))
+        $('#state').val(getUrlParameter('state'))
+        $("html").css("background-image", "url('assets/images/bg-cities.jpg')");
+        $('.collapsible-header').css('background-color', '#311B92');
+        $('.collapsible-header').css('border-color', '#150851');
+        $('.favButton').css('background-color', '#311B92');
+        $('.card').css('display', 'block');
+        $('.slider').remove();
+        $('#main-content').css('display', 'block');
+        console.log('here')
+        $('#start-buttons').addClass('hide');
+        $('#city-search').removeClass('hide');
+        $('#backCurrent').removeClass('orange accent-4');
+        $('#backCurrent').addClass('deep-purple darken-4');
+        $('#back-button').removeClass('hide');
+
+        $('.select-dropdown').val('What kind of place are you looking for?');
+        $('#info-display').removeClass('active');
+        $('#weather-display').removeClass('active');
+        $('.collapsible-body').css('display', 'none');
+        $('#sections').prop('selectedIndex', 0);
+        $('.collapsible-body').attr("style");
+        // Empty information from previous searches
+        $('#single-image').hide();
+        $('#image-card').hide();
+        $('#weather').empty();
+        $('#row1, #row2, #row3, #row4, #row5, #row6').empty();
+        $('#park-info').empty();
+        $('#places').empty();
+        // Display list of places
+        $('#display-places').show();
+        // Search parameters      
+        $('#city').val(getUrlParameter('city'))
+        city = $('#city').val().trim();
+        city = city.replace(/ /g, "%20");
+        city = city.toLowerCase();
+        state = $('#state').val().trim();
+        state = state.toLowerCase();
+        if (states.indexOf(state) === -1) {
+            M.toast({
+                html: "That's not a valid state"
+            })
+            $('#state').val('');
+        } else {
+
+            var cityDisplay = $('#city').val().trim();
+            cityDisplay = cityDisplay.toUpperCase();
+
+            var stateDisplay = $('#state').val().trim();
+            stateDisplay = stateDisplay.toUpperCase();
+            currentTitle = `${cityDisplay}, ${stateDisplay}`;
+            var searchResult = (`${cityDisplay}, ${stateDisplay}`);
+            var currentResult = $(`<h1 class="center-align white-text">${searchResult}</h1>`);
+            $('#current-result').show();
+            $('#current-result').html(currentResult);
+            // Display images
+            search = `${city}%20${state}`;
+            // queryURL = `${queryURLBaseImages}&query=${search}`;
+            queryURL = `${queryURLBaseImages}&q=${search}`;
+            runQueryImages(queryURL);
+            currentWeatherCall();
+            forecastCall();
+        };
+    } else if (window.location.href.indexOf('parkName=') > -1) {
+        $('#parks').val(getUrlParameter('parkName'))
+        $("html").css("background-image", "url('assets/images/bg-parks.jpg')");
+        $('.collapsible-header').css('background-color', '#FF6D00');
+        $('.collapsible-header').css('border-color', '#d85c04');
+        $('.favButton').css('background-color', '#FF6D00');
+        $('.card').css('display', 'block');
+        $('.slider').remove();
+        $('#main-content').css('display', 'block');
+        $('#start-buttons').addClass('hide');
+        $('#parks-search').removeClass('hide');
+        $('#backCurrent').removeClass('deep-purple darken-4')
+        $('#backCurrent').addClass('orange accent-4')
+        $('#back-button').removeClass('hide')
+        $('#info-display').removeClass('active');
+        $('#weather-display').removeClass('active');
+        $('.collapsible-body').css('display', 'none');
+        $('.collapsible-body').attr("style");
+        $('#single-image').hide();
+        $('#image-card').hide();
+        $('.helper-text').attr('data-success', 'Searching...');
+        $("#display-places").css("display", "none");
+        $('#trails').empty();
+        park = $("#parks").val().trim().toLowerCase();
+        var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
+        var parkImageURL = `${queryURLBaseImages}&q=${park}`;
+        runQueryParks(parkInfoURL, parkImageURL);
+    }
     // Get the input field
     var input = $('#state');
     // Execute a function when the user releases a key on the keyboard
