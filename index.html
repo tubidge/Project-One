@@ -20,7 +20,7 @@
   <!-- Slider -->
   <div class="slider fullscreen">
     <ul class="slides">
-      <li>
+      <li> 
         <!-- New York -->
         <img src="assets/images/nyc.jpg" />
         <div class="caption center-align">
@@ -153,14 +153,14 @@
       <div class="row">
         <div class="input-field col s3">
           <input id="city" type="text" class="grey-text text-lighten-1" />
-          <label for="city">City</label>
-
+          <label class="active" for="city">City</label>
           <span class="helper-text" data-error="No Results Found" data-success="Searching..."></span>
+
         </div>
         <div class=" input-field col s3">
 
           <input id="state" type="text" class="autocomplete grey-text text-lighten-1" />
-          <label for="state">State</label>
+          <label class="active" for="state">State</label>
         </div>
         <div class="col s3">
           <a class="btn-floating btn-large waves-effect waves-light deep-purple darken-4" id="search-cities"
@@ -176,8 +176,9 @@
       <div class="row">
         <div class="input-field col s3">
           <input id="parks" type="text" class="grey-text text-lighten-1 validate" />
-          <label for="parks">Park Name</label>
+          <label class="active" for="parks">Park Name</label>
           <span class="helper-text" data-error="wrong" data-success="Searching..."></span>
+
         </div>
         <div class="col s3">
           <a class="btn-floating btn-large waves-effect waves-light orange accent-4" id="search-parks"
