@@ -22,65 +22,65 @@ $(document).ready(function () {
   });
   $("input.autocomplete").autocomplete({
     data: {
-      alabama: null,
-      alaska: null,
-      arizona: null,
-      arkansas: null,
-      california: null,
-      colorado: null,
-      connecticut: null,
-      delaware: null,
-      florida: null,
-      georgia: null,
-      hawaii: null,
-      idaho: null,
-      illinois: null,
-      indiana: null,
-      iowa: null,
-      kansas: null,
-      kentucky: null,
-      louisiana: null,
-      maine: null,
-      maryland: null,
-      massachusetts: null,
-      michigan: null,
-      minnesota: null,
-      mississippi: null,
-      missouri: null,
-      montana: null,
-      nebraska: null,
-      nevada: null,
+      "alabama": null,
+      "alaska": null,
+      "arizona": null,
+      "arkansas": null,
+      "california": null,
+      "colorado": null,
+      "connecticut": null,
+      "delaware": null,
+      "florida": null,
+      "georgia": null,
+      "hawaii": null,
+      "idaho": null,
+      "illinois": null,
+      "indiana": null,
+      "iowa": null,
+      "kansas": null,
+      "kentucky": null,
+      "louisiana": null,
+      "maine": null,
+      "maryland": null,
+      "massachusetts": null,
+      "michigan": null,
+      "minnesota": null,
+      "mississippi": null,
+      "missouri": null,
+      "montana": null,
+      "nebraska": null,
+      "nevada": null,
       "new hampshire": null,
       "new jersey": null,
       "new mexico": null,
       "new york": null,
       "north carolina": null,
       "north dakota": null,
-      ohio: null,
-      oklahoma: null,
-      oregon: null,
-      pennsylvania: null,
+      "ohio": null,
+      "oklahoma": null,
+      "oregon": null,
+      "pennsylvania": null,
       "rhode island": null,
       "south carolina": null,
       "south dakota": null,
-      tennessee: null,
-      texas: null,
-      utah: null,
-      vermont: null,
-      virginia: null,
-      washington: null,
+      "tennessee": null,
+      "texas": null,
+      "utah": null,
+      "vermont": null,
+      "virginia": null,
+      "washington": null,
       "west virginia": null,
-      wisconsin: null,
-      wyoming: null,
+      "wisconsin": null,
+      "wyoming": null,
       "american samoa": null,
       "district of columbia": null,
       "federated states of micronesia": null,
-      guam: null,
+      "guam": null,
       "marshall islands": null,
       "northern mariana islands": null,
-      palau: null,
+      "palau": null,
       "puerto rico": null,
-      "virgin islands": null
+      "virgin islands": null,
     }
   });
   // Hide until cities or park search buttons clicked
@@ -213,7 +213,6 @@ $(document).ready(function () {
         city = $("#city")
           .val()
           .trim();
-
         city = city.toLowerCase();
         state = $("#state")
           .val()
@@ -249,6 +248,9 @@ $(document).ready(function () {
         M.toast({
           html: "No image results"
         });
+        M.toast({
+          html: "You really want to go there?"
+        });
       }
       $("#results-card").show();
     });
@@ -260,18 +262,20 @@ $(document).ready(function () {
       url: queryURL,
       method: "GET"
     }).then(function (res) {
-      console.log(`Places: ${queryURL}`);
-      console.log(res);
       $("#display-places").show();
       var venues = res.response.groups[0].items;
       for (var i = 0; i < venues.length; i++) {
         var name = venues[i].venue.name;
         var venueID = venues[i].venue.id;
         var category = venues[i].venue.categories[0].name;
+        console.log(venues[i].venue.name);
         console.log(venueID);
-        var newPlace = $("<p>");
+        var newPlaceDiv = $("<div>");
+        newPlaceDiv.attr("id", "#firstVenue");
         var newPlaceLink = $("<a>");
-        newPlaceLink.addClass("place");
+        newPlaceLink.addClass("place venue-image waves-effect waves-light btn deep-purple darken-4");
+        newPlaceLink.css("display", "block");
+        newPlaceLink.attr("title", "Click search this place on Google!");
         newPlaceLink.attr("target", "_blank");
         newPlaceLink.attr("data-name", name);
         newPlaceLink.attr("data-id", venueID);
@@ -280,11 +284,42 @@ $(document).ready(function () {
           `https://www.google.com/search?source=hp&ei=IECZXL2eN43J0PEPk9KM6Ak&q=${name}`
         );
         newPlaceLink.text(`${name} - ${category}`);
-        newPlace.html(newPlaceLink);
-        $("#places").append(newPlace);
-      }
+        newPlaceDiv.append(newPlaceLink);
+        $('#places').append(newPlaceDiv);
+      };
     });
-  }
+  };
+
+  // Adding images to venues
+  function runQueryVenueImage(venueImageURL) {
+    $.ajax({
+      url: venueImageURL,
+      method: "GET"
+    }).then(function (res) {
+      console.log(res);
+      var prefix = res.response.photos.items[0].prefix;
+      var suffix = res.response.photos.items[0].suffix;
+      var src = `${prefix}original${suffix}`;
+      var newCard = $("<div>").addClass("venue-card");
+      var venueImageCard = $("<div>").addClass("venue-card-image center-align");
+      var venueImage = $("<img>");
+      venueImage.attr("src", src);
+      venueImage.css({
+        width: "30rem",
+        display: "inline-block",
+        margin: "1rem"
+      });
+      venueImageCard.html(venueImage);
+      newCard.append(venueImageCard);
+    });
+  };
+
+  // Adding images to venues
+  // var venueID = $(this).data("id");
+  // console.log(venueID);
+  // var venueImageURL = `https://api.foursquare.com/v2/venues/${venueID}/photos?client_id=${clientID}&client_secret=${clientIDSec}&v=20180323`;
+  // runQueryVenueImage(venueImageURL);
+
   // Render national park info
   function runQueryParks(queryURL, queryURL2) {
     $.ajax({
@@ -327,7 +362,9 @@ $(document).ready(function () {
             $("#general-weather").empty();
             $("#park-info").empty();
             var resultHeader = $(
-              `<h1 class='center-align white-text'>${currentTitle}</h1>`
+              ` < h1 class = 'center-align white-text' > $ {
+                currentTitle
+              } < /h1>`
             );
             $("#current-result").html(resultHeader);
             $("#general-weather").append(currentResult.weatherinfo);
@@ -766,6 +803,7 @@ $(document).ready(function () {
       });
       $("#state").val("");
     } else {
+      state = state.replace(/ /g, "%20");
       var cityDisplay = $("#city")
         .val()
         .trim();
@@ -792,7 +830,8 @@ $(document).ready(function () {
     }
   });
   // Search national parks
-  $("#search-parks").on("click", function () {
+  $("#search-parks").on("click", function (event) {
+    event.preventDefault();
     $("#trails-display").show();
     $("#info-display").removeClass("active");
     $("#weather-display").removeClass("active");
