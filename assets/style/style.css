@@ -163,3 +163,11 @@ table {
     font-size: 2.5rem !important;
     margin-top: 1rem;
 }
+
+#sections {
+    z-index: 50 !important;
+}
+
+.forecastDt {
+    font-size: 12px;
+}
