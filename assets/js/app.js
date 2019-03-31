@@ -17,8 +17,8 @@ $(document).ready(function () {
     // INITIAL DISPLAY
     // ===============================
     $('.slider').slider({
-        interval: 2100,
-        duration: 800,
+        interval: 4000,
+        duration: 1200,
         // indicators: false,
     });
     $('input.autocomplete').autocomplete({
@@ -104,6 +104,8 @@ $(document).ready(function () {
     var hikingTrails = [];
     var favImage = [];
     var currentTitle = '';
+    var currentCity = '';
+    var currentState = '';
     const numbers = ['one', 'two', 'three'];
 
     // Data Validation
@@ -201,8 +203,9 @@ $(document).ready(function () {
     function runQueryImages(queryURL) {
         $.ajax({
             url: queryURL,
-            method: 'GET'
+            method: "GET"
         }).then(function (res) {
+            console.log(queryURL);
             var images = [];
             var hits = res.hits;
             var length = res.hits.length;
@@ -212,70 +215,80 @@ $(document).ready(function () {
                 var tags = hits[i].tags;
                 var str = tags;
                 var height = hits[i].webformatHeight;
-                city = $('#city').val().trim();
-
+                city = $("#city")
+                    .val()
+                    .trim();
                 city = city.toLowerCase();
-                state = $('#state').val().trim();
+                state = $("#state")
+                    .val()
+                    .trim();
                 state = state.toLowerCase();
                 var n = tags.includes(city);
                 if (n) {
                     if (height > 300) {
                         images.push(url);
-                    };
-                };
-            };
+                    }
+                }
+            }
             favImage = [];
             favImage.push(images[0]);
 
             if (images.length > 2) {
                 // Array to add id to each image
-                var numbers = ['one', 'two', 'three'];
+                var numbers = ["one", "two", "three"];
 
                 for (var i = 0; i < numbers.length; i++) {
                     var src = images[i];
                     var newImage = $(`<img src="${src}" width="400px">`);
                     $(`#${numbers[i]}`).html(newImage);
-                };
+                    $("#image-card").show();
+                }
             } else if (images.length === 1 || images.length === 2) {
                 newImage = $(`<img src="${images[0]}" width="400px">`);
-                $('#image-card').hide();
-                $('#single-image').html(newImage);
-                $('#single-image').show();
+                $("#image-card").hide();
+                $("#single-image").html(newImage);
+                $("#single-image").show();
             } else {
-                $('#image-card').hide();
+                $("#image-card").hide();
                 M.toast({
                     html: "No image results"
                 });
-            };
-            $('#image-card').show();
-            $('#results-card').show();
+            }
+            $("#results-card").show();
         });
-    };
+    }
+
 
     // Render list of places
     function runQueryPlaces(queryURL) {
         $.ajax({
             url: queryURL,
-            method: 'GET'
+            method: "GET"
         }).then(function (res) {
-            console.log(`Places: ${queryURL}`);
-            $('#display-places').show();
+            $("#display-places").show();
             var venues = res.response.groups[0].items;
             for (var i = 0; i < venues.length; i++) {
                 var name = venues[i].venue.name;
                 var venueID = venues[i].venue.id;
                 var category = venues[i].venue.categories[0].name;
+                console.log(venues[i].venue.name);
                 console.log(venueID);
-                var newPlace = $('<p>');
-                var newPlaceLink = $('<a>');
-                newPlaceLink.addClass('place');
-                newPlaceLink.attr('target', '_blank');
-                newPlaceLink.attr('data-name', name);
-                newPlaceLink.attr('data-id', venueID);
-                newPlaceLink.attr('href', `https://www.google.com/search?source=hp&ei=IECZXL2eN43J0PEPk9KM6Ak&q=${name}`);
+                var newPlaceDiv = $("<div>");
+                newPlaceDiv.attr("id", "#firstVenue");
+                var newPlaceLink = $("<a>");
+                newPlaceLink.addClass("place venue-image waves-effect waves-light btn deep-purple darken-4");
+                newPlaceLink.css("display", "block");
+                newPlaceLink.attr("title", "Click search this place on Google!");
+                newPlaceLink.attr("target", "_blank");
+                newPlaceLink.attr("data-name", name);
+                newPlaceLink.attr("data-id", venueID);
+                newPlaceLink.attr(
+                    "href",
+                    `https://www.google.com/search?source=hp&ei=IECZXL2eN43J0PEPk9KM6Ak&q=${name}`
+                );
                 newPlaceLink.text(`${name} - ${category}`);
-                newPlace.html(newPlaceLink);
-                $('#places').append(newPlace);
+                newPlaceDiv.append(newPlaceLink);
+                $('#places').append(newPlaceDiv);
             };
         });
     };
@@ -299,6 +312,9 @@ $(document).ready(function () {
                 console.log(parkResults)
                 $('#results-card').css('display', 'none');
                 parkSearchTimeout()
+                M.toast({
+                    html: "Please Search A Valid Park"
+                })
             } else {
 
                 parkSearchTimeout()
@@ -340,15 +356,15 @@ $(document).ready(function () {
                     url: queryURL,
                     method: "GET"
                 }).then(function (response) {
-                    console.log(response)
-                    $('#weather').empty()
                     // Create a table to hold weather data on page.
                     var table = $("#weather");
+                    $("#current-weather").html("<b> Current Weather </b>");
                     // Adding temperature to page.
-                    var currentTemp = $("<tr>").text(`Current Temperature: ${response.main.temp} F`);
+                    var currentTemp = $("<tr>").text("Temperature: " + (Math.round(response.main.temp)) + String
+                        .fromCharCode(176) + " F");
                     table.append(currentTemp);
                     // Adding wind speed to page.
-                    var windSpeed = $("<tr>").text(`Wind Speed: ${response.wind.speed} mph`);
+                    var windSpeed = $("<tr>").text(`Wind Speed: ${Math.round(response.wind.speed)} mph`);
                     table.append(windSpeed);
                     // Calling function to calculate wind direction.
                     calcWindDir(response.wind.deg);
@@ -369,47 +385,108 @@ $(document).ready(function () {
                     method: "GET"
                 }).then(function (results) {
                     $('#row1, #row2, #row3, #row4, #row5, #row6').empty();
+                    var day1 = undefined;
+                    var day2 = undefined;
+                    var day3 = undefined;
+                    var day4 = undefined;
+                    var day5 = undefined;
+                    currentTime = moment().format("HH:mm");
+                    console.log("Time: " + currentTime);
                     forecastApiResponse = results;
                     console.log(`Forecast Response: ${forecastApiResponse}`);
-                    var day1 = forecastApiResponse.list[5];
-                    var day2 = forecastApiResponse.list[13];
-                    var day3 = forecastApiResponse.list[21];
-                    var day4 = forecastApiResponse.list[29];
-                    var day5 = forecastApiResponse.list[37];
-                    $("#row1").html("<th> 5 Day Forecast </th>");
+                    if (currentTime >= "00:00" && currentTime < "03:00") {
+                        day1 = forecastApiResponse.list[11];
+                        day2 = forecastApiResponse.list[19];
+                        day3 = forecastApiResponse.list[27];
+                        day4 = forecastApiResponse.list[35];
+                        day5 = forecastApiResponse.list[43];
+                    } else if (currentTime >= "03:00" && currentTime < "06:00") {
+                        day1 = forecastApiResponse.list[10];
+                        day2 = forecastApiResponse.list[18];
+                        day3 = forecastApiResponse.list[26];
+                        day4 = forecastApiResponse.list[34];
+                        day5 = forecastApiResponse.list[42];
+                    } else if (currentTime >= "06:00" && currentTime < "09:00") {
+                        day1 = forecastApiResponse.list[9];
+                        day2 = forecastApiResponse.list[17];
+                        day3 = forecastApiResponse.list[25];
+                        day4 = forecastApiResponse.list[33];
+                        day5 = forecastApiResponse.list[41];
+                    } else if (currentTime >= "09:00" && currentTime < "12:00") {
+                        day1 = forecastApiResponse.list[8];
+                        day2 = forecastApiResponse.list[16];
+                        day3 = forecastApiResponse.list[24];
+                        day4 = forecastApiResponse.list[32];
+                        day5 = forecastApiResponse.list[40];
+                    } else if (currentTime >= "12:00" && currentTime < "15:00") {
+                        day1 = forecastApiResponse.list[7];
+                        day2 = forecastApiResponse.list[15];
+                        day3 = forecastApiResponse.list[23];
+                        day4 = forecastApiResponse.list[31];
+                        day5 = forecastApiResponse.list[39];
+                    } else if (currentTime >= "15:00" && currentTime < "18:00") {
+                        day1 = forecastApiResponse.list[6];
+                        day2 = forecastApiResponse.list[14];
+                        day3 = forecastApiResponse.list[22];
+                        day4 = forecastApiResponse.list[30];
+                        day5 = forecastApiResponse.list[38];
+                    } else if (currentTime >= "18:00" && currentTime < "21:00") {
+                        day1 = forecastApiResponse.list[5];
+                        day2 = forecastApiResponse.list[13];
+                        day3 = forecastApiResponse.list[21];
+                        day4 = forecastApiResponse.list[29];
+                        day5 = forecastApiResponse.list[37];
+                    } else if (currentTime >= "21:00" && currentTime < "24:00") {
+                        day1 = forecastApiResponse.list[4];
+                        day2 = forecastApiResponse.list[12];
+                        day3 = forecastApiResponse.list[20];
+                        day4 = forecastApiResponse.list[28];
+                        day5 = forecastApiResponse.list[36];
+                    };
+
+                    $("#forecast-head").html("<b> 5 Day Forecast (mid-day)</b>");
+
                     var row2 = $("#row2");
-                    var day1Date = $("<th>").text(moment.unix(day1.dt).format("MMM Do YYYY"));
-                    var day2Date = $("<th>").text(moment.unix(day2.dt).format("MMM Do YYYY"));
-                    var day4Date = $("<th>").text(moment.unix(day4.dt).format("MMM Do YYYY"));
-                    var day3Date = $("<th>").text(moment.unix(day3.dt).format("MMM Do YYYY"));
-                    var day5Date = $("<th>").text(moment.unix(day5.dt).format("MMM Do YYYY"));
+                    var day1Date = $("<th class='forecastDt'>").text(moment.unix(day1.dt).format("MMM Do YYYY"));
+                    var day2Date = $("<th class='forecastDt'>").text(moment.unix(day2.dt).format("MMM Do YYYY"));
+                    var day4Date = $("<th class='forecastDt'>").text(moment.unix(day4.dt).format("MMM Do YYYY"));
+                    var day3Date = $("<th class='forecastDt'>").text(moment.unix(day3.dt).format("MMM Do YYYY"));
+                    var day5Date = $("<th class='forecastDt'>").text(moment.unix(day5.dt).format("MMM Do YYYY"));
                     row2.append(day1Date);
                     row2.append(day2Date);
                     row2.append(day3Date);
                     row2.append(day4Date);
                     row2.append(day5Date);
+
                     var row3 = $("#row3");
-                    var day1Temp = $("<td>").text(`Temperature: ${day1.main.temp}`)
-                    var day2Temp = $("<td>").text(`Temperature: ${day2.main.temp}`);
-                    var day3Temp = $("<td>").text(`Temperature: ${day3.main.temp}`);
-                    var day4Temp = $("<td>").text(`Temperature: ${day4.main.temp}`);
-                    var day5Temp = $("<td>").text(`Temperature: ${day5.main.temp}`);
+                    var day1Temp = $("<td>").text("Temperature: " + (Math.round(day1.main.temp)) + String
+                        .fromCharCode(176) + " F");
+                    var day2Temp = $("<td>").text("Temperature: " + (Math.round(day2.main.temp)) + String
+                        .fromCharCode(176) + " F");
+                    var day3Temp = $("<td>").text("Temperature: " + (Math.round(day3.main.temp)) + String
+                        .fromCharCode(176) + " F");
+                    var day4Temp = $("<td>").text("Temperature: " + (Math.round(day4.main.temp)) + String
+                        .fromCharCode(176) + " F");
+                    var day5Temp = $("<td>").text("Temperature: " + (Math.round(day5.main.temp)) + String
+                        .fromCharCode(176) + " F");
                     row3.append(day1Temp);
                     row3.append(day2Temp);
                     row3.append(day3Temp);
                     row3.append(day4Temp);
                     row3.append(day5Temp);
+
                     var row4 = $("#row4");
-                    var day1WindSpeed = $("<td>").text(`Wind Speed: ${day1.wind.speed} mph`);
-                    var day2WindSpeed = $("<td>").text(`Wind Speed: ${day2.wind.speed} mph`);
-                    var day3WindSpeed = $("<td>").text(`Wind Speed: ${day3.wind.speed} mph`);
-                    var day4WindSpeed = $("<td>").text(`Wind Speed: ${day4.wind.speed} mph`);
-                    var day5WindSpeed = $("<td>").text(`Wind Speed: ${day5.wind.speed} mph`);
+                    var day1WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day1.wind.speed)} mph`);
+                    var day2WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day2.wind.speed)} mph`);
+                    var day3WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day3.wind.speed)} mph`);
+                    var day4WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day4.wind.speed)} mph`);
+                    var day5WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day5.wind.speed)} mph`);
                     row4.append(day1WindSpeed);
                     row4.append(day2WindSpeed);
                     row4.append(day3WindSpeed);
                     row4.append(day4WindSpeed);
                     row4.append(day5WindSpeed);
+
                     var row5 = $("#row5");
                     calcWindDir(day1.wind.deg);
                     var day1WindDir = $("<td>").text(`Wind Direction: ${windDirection}`);
@@ -426,6 +503,7 @@ $(document).ready(function () {
                     row5.append(day3WindDir);
                     row5.append(day4WindDir);
                     row5.append(day5WindDir);
+
                     var row6 = $("#row6");
                     var day1Humidity = $("<td>").text(`Humidity: ${day1.main.humidity}%`);
                     var day2Humidity = $("<td>").text(`Humidity: ${day2.main.humidity}%`);
@@ -457,13 +535,15 @@ $(document).ready(function () {
                         var difficulty = results[i].difficulty;
                         var status = results[i].conditionStatus;
                         var description = results[i].summary;
+                        var link = results[i].url;
                         var trailObject = {
                             trail: trail,
                             trailPic: trailPic,
                             trailRating: trailRating,
                             difficulty: difficulty,
                             status: status,
-                            description: description
+                            description: description,
+                            link: link
                         }
                         hikingTrails.push(trailObject);
                     }
@@ -487,11 +567,13 @@ $(document).ready(function () {
         }).then(function (response) {
             // Create a table to hold weather data on page.
             var table = $("#weather");
+            $("#current-weather").html("<b> Current Weather </b>");
             // Adding temperature to page.
-            var currentTemp = $("<tr>").text(`Current Temperature: ${response.main.temp} F`);
+            var currentTemp = $("<tr>").text("Temperature: " + (Math.round(response.main.temp)) + String
+                .fromCharCode(176) + " F");
             table.append(currentTemp);
             // Adding wind speed to page.
-            var windSpeed = $("<tr>").text(`Wind Speed: ${response.wind.speed} mph`);
+            var windSpeed = $("<tr>").text(`Wind Speed: ${Math.round(response.wind.speed)} mph`);
             table.append(windSpeed);
             // Calling function to calculate wind direction.
             calcWindDir(response.wind.deg);
@@ -513,22 +595,72 @@ $(document).ready(function () {
             url: queryURL,
             method: "GET"
         }).then(function (response) {
+            var day1 = undefined;
+            var day2 = undefined;
+            var day3 = undefined;
+            var day4 = undefined;
+            var day5 = undefined;
+            currentTime = moment().format("HH:mm");
+            console.log("Time: " + currentTime);
             forecastApiResponse = response;
             console.log(`Forecast Response: ${forecastApiResponse}`);
-            var day1 = forecastApiResponse.list[5];
-            var day2 = forecastApiResponse.list[13];
-            var day3 = forecastApiResponse.list[21];
-            var day4 = forecastApiResponse.list[29];
-            var day5 = forecastApiResponse.list[37];
-
-            $("#row1").html("<th> 5 Day Forecast </th>");
+            if (currentTime >= "00:00" && currentTime < "03:00") {
+                day1 = forecastApiResponse.list[11];
+                day2 = forecastApiResponse.list[19];
+                day3 = forecastApiResponse.list[27];
+                day4 = forecastApiResponse.list[35];
+                day5 = forecastApiResponse.list[43];
+            } else if (currentTime >= "03:00" && currentTime < "06:00") {
+                day1 = forecastApiResponse.list[10];
+                day2 = forecastApiResponse.list[18];
+                day3 = forecastApiResponse.list[26];
+                day4 = forecastApiResponse.list[34];
+                day5 = forecastApiResponse.list[42];
+            } else if (currentTime >= "06:00" && currentTime < "09:00") {
+                day1 = forecastApiResponse.list[9];
+                day2 = forecastApiResponse.list[17];
+                day3 = forecastApiResponse.list[25];
+                day4 = forecastApiResponse.list[33];
+                day5 = forecastApiResponse.list[41];
+            } else if (currentTime >= "09:00" && currentTime < "12:00") {
+                day1 = forecastApiResponse.list[8];
+                day2 = forecastApiResponse.list[16];
+                day3 = forecastApiResponse.list[24];
+                day4 = forecastApiResponse.list[32];
+                day5 = forecastApiResponse.list[40];
+            } else if (currentTime >= "12:00" && currentTime < "15:00") {
+                day1 = forecastApiResponse.list[7];
+                day2 = forecastApiResponse.list[15];
+                day3 = forecastApiResponse.list[23];
+                day4 = forecastApiResponse.list[31];
+                day5 = forecastApiResponse.list[39];
+            } else if (currentTime >= "15:00" && currentTime < "18:00") {
+                day1 = forecastApiResponse.list[6];
+                day2 = forecastApiResponse.list[14];
+                day3 = forecastApiResponse.list[22];
+                day4 = forecastApiResponse.list[30];
+                day5 = forecastApiResponse.list[38];
+            } else if (currentTime >= "18:00" && currentTime < "21:00") {
+                day1 = forecastApiResponse.list[5];
+                day2 = forecastApiResponse.list[13];
+                day3 = forecastApiResponse.list[21];
+                day4 = forecastApiResponse.list[29];
+                day5 = forecastApiResponse.list[37];
+            } else if (currentTime >= "21:00" && currentTime < "24:00") {
+                day1 = forecastApiResponse.list[4];
+                day2 = forecastApiResponse.list[12];
+                day3 = forecastApiResponse.list[20];
+                day4 = forecastApiResponse.list[28];
+                day5 = forecastApiResponse.list[36];
+            };
+            $("#forecast-head").html("<b> 5 Day Forecast (mid-day)</b>");
 
             var row2 = $("#row2");
-            var day1Date = $("<th>").text(moment.unix(day1.dt).format("MMM Do YYYY"));
-            var day2Date = $("<th>").text(moment.unix(day2.dt).format("MMM Do YYYY"));
-            var day4Date = $("<th>").text(moment.unix(day4.dt).format("MMM Do YYYY"));
-            var day3Date = $("<th>").text(moment.unix(day3.dt).format("MMM Do YYYY"));
-            var day5Date = $("<th>").text(moment.unix(day5.dt).format("MMM Do YYYY"));
+            var day1Date = $("<th class='forecastDt'>").text(moment.unix(day1.dt).format("MMM Do YYYY"));
+            var day2Date = $("<th class='forecastDt'>").text(moment.unix(day2.dt).format("MMM Do YYYY"));
+            var day4Date = $("<th class='forecastDt'>").text(moment.unix(day4.dt).format("MMM Do YYYY"));
+            var day3Date = $("<th class='forecastDt'>").text(moment.unix(day3.dt).format("MMM Do YYYY"));
+            var day5Date = $("<th class='forecastDt'>").text(moment.unix(day5.dt).format("MMM Do YYYY"));
             row2.append(day1Date);
             row2.append(day2Date);
             row2.append(day3Date);
@@ -536,11 +668,16 @@ $(document).ready(function () {
             row2.append(day5Date);
 
             var row3 = $("#row3");
-            var day1Temp = $("<td>").text(`Temperature: ${day1.main.temp}`)
-            var day2Temp = $("<td>").text(`Temperature: ${day2.main.temp}`);
-            var day3Temp = $("<td>").text(`Temperature: ${day3.main.temp}`);
-            var day4Temp = $("<td>").text(`Temperature: ${day4.main.temp}`);
-            var day5Temp = $("<td>").text(`Temperature: ${day5.main.temp}`);
+            var day1Temp = $("<td>").text("Temperature: " + (Math.round(day1.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day2Temp = $("<td>").text("Temperature: " + (Math.round(day2.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day3Temp = $("<td>").text("Temperature: " + (Math.round(day3.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day4Temp = $("<td>").text("Temperature: " + (Math.round(day4.main.temp)) + String
+                .fromCharCode(176) + " F");
+            var day5Temp = $("<td>").text("Temperature: " + (Math.round(day5.main.temp)) + String
+                .fromCharCode(176) + " F");
             row3.append(day1Temp);
             row3.append(day2Temp);
             row3.append(day3Temp);
@@ -548,11 +685,11 @@ $(document).ready(function () {
             row3.append(day5Temp);
 
             var row4 = $("#row4");
-            var day1WindSpeed = $("<td>").text(`Wind Speed: ${day1.wind.speed} mph`);
-            var day2WindSpeed = $("<td>").text(`Wind Speed: ${day2.wind.speed} mph`);
-            var day3WindSpeed = $("<td>").text(`Wind Speed: ${day3.wind.speed} mph`);
-            var day4WindSpeed = $("<td>").text(`Wind Speed: ${day4.wind.speed} mph`);
-            var day5WindSpeed = $("<td>").text(`Wind Speed: ${day5.wind.speed} mph`);
+            var day1WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day1.wind.speed)} mph`);
+            var day2WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day2.wind.speed)} mph`);
+            var day3WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day3.wind.speed)} mph`);
+            var day4WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day4.wind.speed)} mph`);
+            var day5WindSpeed = $("<td>").text(`Wind Speed: ${Math.round(day5.wind.speed)} mph`);
             row4.append(day1WindSpeed);
             row4.append(day2WindSpeed);
             row4.append(day3WindSpeed);
@@ -623,7 +760,9 @@ $(document).ready(function () {
     });
     // Search cities and states
     $('#search-cities').on('click', function () {
+        event.preventDefault();
         console.log('here')
+        $("#trails-display").hide();
         $('.select-dropdown').val('What kind of place are you looking for?');
         $('#info-display').removeClass('active');
         $('#weather-display').removeClass('active');
@@ -658,6 +797,8 @@ $(document).ready(function () {
             cityDisplay = cityDisplay.toUpperCase();
 
             var stateDisplay = $('#state').val().trim();
+            currentCity = cityDisplay;
+            currentState = stateDisplay;
             stateDisplay = stateDisplay.toUpperCase();
             currentTitle = `${cityDisplay}, ${stateDisplay}`;
             var searchResult = (`${cityDisplay}, ${stateDisplay}`);
@@ -672,48 +813,69 @@ $(document).ready(function () {
             currentWeatherCall();
             forecastCall();
             $('#state').val('');
+            $('#city').val('');
         };
     });
     // Search national parks
     $(document).on('click', '#search-parks', function () {
-        $('#info-display').removeClass('active');
-        $('#weather-display').removeClass('active');
-        $('.collapsible-body').css('display', 'none');
-        $('.collapsible-body').attr("style");
-        $('#single-image').hide();
-        $('#image-card').hide();
-        $('.helper-text').attr('data-success', 'Searching...');
-        $("#display-places").css("display", "none");
-        $('#trails').empty();
+        event.preventDefault();
         park = $("#parks").val().trim().toLowerCase();
-        var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
-        var parkImageURL = `${queryURLBaseImages}&q=${park}`;
-        runQueryParks(parkInfoURL, parkImageURL);
-        $('#parks').val('');
+        if (park === '' || park === ' ') {
+            M.toast({
+                html: "Please Search A Valid Park"
+            })
+        } else {
+            $("#trails-display").show();
+            $('#info-display').removeClass('active');
+            $('#weather-display').removeClass('active');
+            $('.collapsible-body').css('display', 'none');
+            $('.collapsible-body').attr("style");
+            $('#single-image').hide();
+            $('#image-card').hide();
+            $('.helper-text').attr('data-success', 'Searching...');
+            $("#display-places").css("display", "none");
+            $('#trails').empty();
+            var currentResult = $(`<h1 class="center-align white-text">${park}</h1>`);
+            $('#current-result').show();
+            $('#current-result').html(currentResult);
+            var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
+            var parkImageURL = `${queryURLBaseImages}&q=${park}`;
+            runQueryParks(parkInfoURL, parkImageURL);
+            $('#parks').val('');
+
+        }
 
 
 
     });
     // Get selected section
-    $(document).on('change', '#sections', function () {
-        var sel = $('#sections');
+    // Get selected section
+    $(document).on("change", "#sections", function () {
+        var sel = $("#sections");
         var opt = sel[0].options;
         var length = opt.length;
-        $('#places').empty();
+        $("#places").empty();
         for (var i = 0; i < length; i++) {
             selected = opt[i].value;
             if (opt[i].selected === true) {
                 var currentSection = opt[i].value;
                 // Render list of places
-                var city = $('#city').val().trim();
+                var city = currentCity;
                 city = city.replace(/ /g, "%20");
-                var state = $('#state').val().trim();
-                var search = (`${city},${state}`);
+                var state = currentState;
+                state = state.replace(/ /g, "%20");
+                var search = `${city},${state}`;
                 var section = currentSection;
-                var queryURLSelected = queryURLBasePlaces + '&near=' + search + '&section=' + section + '&limit=5';
+                var queryURLSelected =
+                    queryURLBasePlaces +
+                    "&near=" +
+                    search +
+                    "&section=" +
+                    section +
+                    "&limit=5";
                 runQueryPlaces(queryURLSelected);
-            };
-        };
+            }
+        }
     });
     $('#cities-start').click(function () {
         $('#city').val(getUrlParameter('city'))
@@ -745,6 +907,7 @@ $(document).ready(function () {
     });
     // Clear everything when back button clicked
     $(document).on('click', '#back-button', function () {
+        $("#trails-display").hide();
         $('#current-result').hide();
         $('#current-result').empty();
         $("html").css("background-image", "url('assets/images/bg.jpg')");
@@ -761,6 +924,7 @@ $(document).ready(function () {
 
     });
 
+    // Show Trail Info 
     $(document).on('click', '.hike', function () {
         $('.trail-card').remove();
         var event = $(this).attr('data-number');
@@ -773,13 +937,15 @@ $(document).ready(function () {
         var title = $('<span>').addClass('card-title').text(trail.trail);
         trailImage.append(trailPic).append(title);
         trailCard.append(trailImage)
-        var list = $('<ul>').css('margin-left', '2rem')
-        var trailRating = $('<li>').text(`Average Rating: ${trail.trailRating}`)
-        var difficulty = $('<li>').text(`Trail Difficulty: ${trail.difficulty}`)
-        var status = $('<li>').text(`Trail Status: ${trail.status}`)
+        var list = $('<ul>').css('margin', '2rem')
+        var trailRating = $('<li>').text(`Average Rating: ${trail.trailRating}`).css('margin', '.5rem')
+        var difficulty = $('<li>').text(`Trail Difficulty: ${trail.difficulty}`).css('margin', '.5rem')
+        var status = $('<li>').text(`Trail Status: ${trail.status}`).css('margin', '.5rem')
         list.append(trailRating).append(difficulty).append(status);
-        var description = $('<p>').text(trail.description);
-        trailCard.append(list).append(description)
+        var description = $('<p>').text(trail.description).css('margin', '1rem')
+        var btn = $('<a>').attr('href', trail.link).addClass('waves-effect waves-light btn orange accent-3').text('More Info')
+        btn.attr('target', 'blank').css('margin', '1rem')
+        trailCard.append(list).append(description).append(btn)
         trailCard.insertAfter(this)
     });
 
@@ -795,6 +961,7 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.favButton', function () {
+        event.preventDefault();
         //search database
         //loop through search results
         //if search results don't exist, push to database.
@@ -883,11 +1050,13 @@ $(document).ready(function () {
         $('.collapsible-header').css('border-color', '#150851');
         $('.favButton').css('background-color', '#311B92');
         console.log('here')
+
         $('#start-buttons').addClass('hide');
         $('#city-search').removeClass('hide');
         $('#back-button').removeClass('orange accent-4')
         $('#back-button').addClass('deep-purple darken-4')
         $('#back-button').removeClass('hide')
+
         $('#city').val('');
         $('#state').val('');
     });
@@ -948,6 +1117,10 @@ $(document).ready(function () {
         city = city.toLowerCase();
         state = $('#state').val().trim();
         state = state.toLowerCase();
+        currentCity = city;
+        currentState = state;
+        console.log(currentCity)
+        console.log(currentState)
         if (states.indexOf(state) === -1) {
             M.toast({
                 html: "That's not a valid state"
@@ -974,6 +1147,7 @@ $(document).ready(function () {
             forecastCall();
             $('#city').val('');
             $('#state').val('');
+            $("#trails-display").hide();
         };
     } else if (window.location.href.indexOf('parkName=') > -1) {
         $('#parks').val(getUrlParameter('parkName'))
@@ -998,22 +1172,16 @@ $(document).ready(function () {
         $('.helper-text').attr('data-success', 'Searching...');
         $("#display-places").css("display", "none");
         $('#trails').empty();
+        var title = $('#parks').val().trim();
+        var currentResult = $(`<h1 class="center-align white-text">${title}</h1>`);
+        $('#current-result').show();
+        $('#current-result').html(currentResult);
         park = $("#parks").val().trim().toLowerCase();
         var parkInfoURL = `${queryURLBaseParks}&q=${park}`;
         var parkImageURL = `${queryURLBaseImages}&q=${park}`;
         runQueryParks(parkInfoURL, parkImageURL);
         $('#parks').val('');
     }
-    // Get the input field
-    var input = $('#state');
-    // Execute a function when the user releases a key on the keyboard
-    input.on("keyup", function (event) {
-        // Number 13 is the "Enter" key on the keyboard
-        if (event.keyCode === 13) {
-            // Cancel the default action, if needed
-            event.preventDefault();
-            // Trigger the button element with a click
-            $('#search-cities').click();
-        }
-    });
+
+
 });
