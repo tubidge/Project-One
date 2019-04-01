@@ -19,7 +19,7 @@ $(document).ready(function () {
     $('.slider').slider({
         interval: 4000,
         duration: 1200,
-        // indicators: false,
+        indicators: true,
     });
     $('input.autocomplete').autocomplete({
         data: {
@@ -325,7 +325,7 @@ $(document).ready(function () {
                 for (var i = 0; i < length; i++) {
                     var currentResult = results[i];
 
-                    if (currentResult.name.toLowerCase() === park || currentResult.fullname.toLowerCase() === park) {
+                    if (currentResult.name.toLowerCase() === park || currentResult.fullName.toLowerCase() === park) {
                         console.log('working')
                         currentTitle = currentResult.fullname;
                         console.log(currentTitle)
@@ -345,7 +345,7 @@ $(document).ready(function () {
 
 
                 // Weather Forecast API call for national Parks
-                var latLong = results[0].latlong.split(", ");
+                var latLong = results[0].latLong.split(", ");
                 var lat = Math.floor(latLong[0].slice(4, -1));
                 var long = Math.floor(latLong[1].slice(5, -1));
                 var queryURL =
@@ -1021,7 +1021,7 @@ $(document).ready(function () {
         var favImage = $('<div>').addClass('card-image');
         var favPic = $('<img>');
         favPic.attr('src', snap.val().img)
-        favPic.css('height', '25rem')
+        favPic.css('height', '20rem')
         var title = $('<span>').addClass('card-title').text(snap.val().title);
         var search = $('<i>').addClass('material-icons black-text').text('search')
         var btn = $('<a>').attr('href', goTo).addClass('btn-floating halfway-fab waves-effect waves-light fav-search').css({
