@@ -327,7 +327,7 @@ $(document).ready(function () {
 
                     if (currentResult.name.toLowerCase() === park || currentResult.fullName.toLowerCase() === park) {
                         console.log('working')
-                        currentTitle = currentResult.fullname;
+                        currentTitle = currentResult.fullName;
                         console.log(currentTitle)
                         console.log(currentResult.description)
                         console.log(currentResult.directionsinfo)
