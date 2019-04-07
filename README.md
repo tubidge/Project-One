@@ -1,5 +1,6 @@
 # Project-One (Destinations)
 
+
 * Welcome to our U.S. Destinations site.
 
 * Feel free to search a U.S. city or national park.
